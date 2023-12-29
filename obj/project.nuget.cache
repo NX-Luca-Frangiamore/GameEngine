@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "w0cvDDlrkL87TeqHIZ4dcm+ewUgGZenRsGygot5Lu9XFuW3D4t8jTdlBVJUaeW4VYHqf7xd9leO23NRYCjX1bA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Luca Frangiamore\\Desktop\\Training\\Game\\Game.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Luca Frangiamore\\.nuget\\packages\\fluentresults\\3.15.2\\fluentresults.3.15.2.nupkg.sha512",
+    "C:\\Users\\Luca Frangiamore\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.1\\microsoft.extensions.logging.abstractions.6.0.1.nupkg.sha512",
+    "C:\\Users\\Luca Frangiamore\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512"
+  ],
+  "logs": []
+}
