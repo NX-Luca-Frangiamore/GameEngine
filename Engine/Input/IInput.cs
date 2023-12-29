@@ -1,4 +1,4 @@
-
+namespace InputEngine;
 public abstract class IInput{
     public string? state=null;
     public abstract void StartUpdateInput(); 

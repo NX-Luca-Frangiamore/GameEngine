@@ -1,6 +1,7 @@
 
 using Graphics;
 using Object;
+using PhysicsEngine;
 using Utils;
 
 namespace GraphicsEngine;
@@ -8,6 +9,7 @@ public abstract class IGraphicsEngine{
     public IDisplay Display;
     public abstract void ShowFrame(List<Object.Object> sprites);
     public abstract void ShowEmptyFrame();
+
     public IGraphicsEngine(IDisplay display){
         this.Display = display;
     } 

@@ -1,11 +1,21 @@
+using Engine;
 using Object;
 using Utils;
 
 namespace PhysicsEngine;
-public class PhysicsEngine : IPhisicsEngine
+public class BasePhysicsEngine : IPhisicsEngine
 {
-    public bool Move(Object.Object @object,Vector2 v)
+    public BasePhysicsEngine(ResourceEngine objectsReferents) : base(objectsReferents)
     {
-        return @object.SetAbsolutePosition(@object.AbsolutePosition.Plus(v));
+    }
+
+    public override bool Move(Object.Object body, Vector2 v)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override bool Traslate(Object.Object body, Vector2 v)
+    {
+        throw new NotImplementedException();
     }
 }

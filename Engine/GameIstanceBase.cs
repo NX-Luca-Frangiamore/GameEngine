@@ -1,4 +1,5 @@
 using GraphicsEngine;
+using InputEngine;
 using PhysicsEngine;
 
 namespace Engine;
@@ -8,11 +9,13 @@ public abstract partial class Engine{
     private const int MAX_TIME_FRAME= 2000;
     private IPhisicsEngine PhisicsEngine;
     protected IInput InputEngine;
+    protected ResourceEngine ResourceEngine;
     private IGraphicsEngine GraphicsEngine;
-    public Engine(IPhisicsEngine phisicsEngine,IGraphicsEngine graphicsEngine,IInput inputEngine){
+    public Engine(IPhisicsEngine phisicsEngine,IGraphicsEngine graphicsEngine,IInput inputEngine,ResourceEngine resourceEngine){
         this.PhisicsEngine = phisicsEngine;
         this.GraphicsEngine = graphicsEngine;
         this.InputEngine = inputEngine;
+        this.ResourceEngine = resourceEngine;
     }
 
     public void SetTimeFrame(int time){
@@ -35,7 +38,7 @@ public abstract partial class Engine{
     private void Loop(){
         while(StatusLoop){
             BeforeRefresh();
-            this.GraphicsEngine.ShowFrame(this.GetAllObjects());
+            this.GraphicsEngine.ShowFrame(ResourceEngine.GetAllObjects());
             AfterRefresh();
             Thread.Sleep(TimeFrame);
         }
