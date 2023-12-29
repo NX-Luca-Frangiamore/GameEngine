@@ -1,7 +1,7 @@
-using System.ComponentModel;
-using System.Reflection.Metadata;
 
-namespace Utils;
+using Utils;
+
+namespace Graphics;
 public class PixelsMatrix:Matrix<String>
 {
     public int NCharactersPixel { get; private set; }
@@ -16,8 +16,9 @@ public class PixelsMatrix:Matrix<String>
                 if (!this.Set(new(x, y), data)) return false;
         return true;
     }
-    public bool SetPixel(Vector2 p, string data)
+    public bool SetPixel(Vector2 p, string? data)
     {
+        if (data is null) return false;
         if (data.Length > this.NCharactersPixel) return false;
         return Set(p, data);
     }

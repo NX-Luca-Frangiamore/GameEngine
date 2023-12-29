@@ -1,35 +1,38 @@
-﻿using Screen;
+﻿using Engine;
+using GraphicsEngine;
+using Object;
+using PhysicsEngine;
 using Utils;
 
-var _try=new Game(new Display(new(20, 20), 1),new ConsoleInput());
+var _try=new Game(new PhysicsEngine.PhysicsEngine()
+                 ,new GraphicsEngine.ConsoleGraphicsEngine(new Display(new (20,20)))
+                 ,new InputEngine.ConsoleInput());
 _try.SetTimeFrame(250);
 _try.StartLoop();
 
-public class Game : GameIstanceBase {
+public class Game : Engine.Engine {
     Vector2 Speed = new Vector2(0, 0); 
-    readonly IInput InputManager;
-    public Game(Display display,IInput inputManager):base(display)
+
+    public Game(IPhisicsEngine phisicsEngine, IGraphicsEngine graphicsEngine, IInput inputEngine) : base(phisicsEngine, graphicsEngine, inputEngine)
     {
-        this.InputManager = inputManager;
     }
 
     public override void BeforeStartLoop()
     {
         base.BeforeStartLoop();
-        BaseObject o = new(new(2, 2), new(0, 1), 1);
-        o.Sprite.FillWith("o");
-        resourcesManager.AddNewObject("prova",o);
-        o = new(new(4, 4), new(0, 5), 1);
-        o.Sprite.FillWith("*");
-        resourcesManager.AddNewObject("obstacle", o); 
-        this.Display.SetFrame(this.Display.NewEmptyFrame());
-        this.InputManager.Delay = 100;
-        this.InputManager.StartUpdateInput();
+        Object.Object o = new(new(1, 1), new(9, 1));
+        o.Skin.Data.FillWith("o");
+        this.AddNewObject("prova",o);
+        o = new(new(4, 4), new(0, 5));
+        o.Skin.Data.FillWith("*");
+        this.AddNewObject("obstacle", o); 
+        this.InputEngine.Delay = 100;
+        this.InputEngine.StartUpdateInput();
     }
     public override void BeforeRefresh()
     {
-        this.Speed=MappingInputToVector2(this.InputManager.state);
-        this.resourcesManager.MoveObjectWithV("prova", Speed);
+        this.Speed=MappingInputToVector2(this.InputEngine.state);
+        this.GetObject("prova")!.SetAbsolutePosition(Speed);
     }
     private Vector2 MappingInputToVector2(string? key){
         return key switch

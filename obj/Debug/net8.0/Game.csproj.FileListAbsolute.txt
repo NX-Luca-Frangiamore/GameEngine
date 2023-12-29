@@ -16,3 +16,4 @@ C:\Users\Luca Frangiamore\Desktop\Training\Game\bin\Debug\net8.0\FluentResults.d
 C:\Users\Luca Frangiamore\Desktop\Training\Game\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\Luca Frangiamore\Desktop\Training\Game\obj\Debug\net8.0\Game.csproj.AssemblyReference.cache
 C:\Users\Luca Frangiamore\Desktop\Training\Game\obj\Debug\net8.0\Game.csproj.CopyComplete
+C:\Users\Luca Frangiamore\Desktop\Training\Game\obj\Debug\net8.0\Game.sourcelink.json
