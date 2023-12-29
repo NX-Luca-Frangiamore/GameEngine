@@ -3,8 +3,8 @@ using Utils;
 
 namespace GraphicsEngine;
 public abstract class IDisplay{
-    public Vector2 Dimension{ get; protected set; }
-    public IDisplay(Vector2 dimension){
+    public Point2 Dimension{ get; protected set; }
+    public IDisplay(Point2 dimension){
         this.Dimension = dimension;
     }
     public abstract void ShowFrame(PixelsMatrix frame);
@@ -12,7 +12,7 @@ public abstract class IDisplay{
 }
 public class Display:IDisplay
 {
-    public Display(Vector2 dimension):base(dimension)
+    public Display(Point2 dimension):base(dimension)
     {    }
     
     public override void ShowFrame(PixelsMatrix frame)
