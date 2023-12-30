@@ -13,7 +13,7 @@ public class DumbObject{
     public DumbObject(Point2 dimension, Point2 position) {
         this.Skin = new(dimension,new(0,0));
         this.Body = new(dimension,new(0,0));
-        SetAbsolutePosition(position); 
+        AbsolutePosition = position;
     }
     public bool SetAbsolutePosition(Point2 p){
         AbsolutePosition = p;
