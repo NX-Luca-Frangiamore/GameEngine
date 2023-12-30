@@ -21,13 +21,13 @@ public class DumbObject{
     }
 }
 #pragma warning disable CS8618 
-public abstract class Object{
+public abstract class IObject{
     public DumbObject DumbObject{ get; set; }
-    public Engine.Engine Engine;
+    public Engine.IEngine Engine;
     public void SetStillObject(DumbObject stillObject){
         this.DumbObject = stillObject;
     }
-    public void Setup(Engine.Engine engine){
+    public void Setup(Engine.IEngine engine){
         this.Engine = engine;
         if(DumbObject is null)return ;
     }

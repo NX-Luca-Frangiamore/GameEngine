@@ -4,7 +4,7 @@ using Utils;
 namespace Graphics.Display;
 public class ConsoleMonoColorDisplay:IDisplay
 {
-    public ConsoleMonoColorDisplay(Point2 dimension):base(dimension)
+    public ConsoleMonoColorDisplay()
     {    }
 
     public override void NewLine()

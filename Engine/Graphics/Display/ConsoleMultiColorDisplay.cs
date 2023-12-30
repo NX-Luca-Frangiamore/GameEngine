@@ -4,9 +4,6 @@ using Utils;
 class ConsoleMulticolorDisplay : IDisplay
 {
     const ConsoleColor DEFAULT_COLOR = ConsoleColor.Green;
-    public ConsoleMulticolorDisplay(Point2 dimension) : base(dimension)
-    {
-    }
 
     public override void NewLine()=>Console.WriteLine();
 
