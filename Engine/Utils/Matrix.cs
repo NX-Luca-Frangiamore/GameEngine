@@ -9,20 +9,19 @@ public class Matrix<T>{
     }
 
     protected T? GetElement(Point2 p){
-        if (!IsElementInMatrix(p)) return default(T);
+        if (!CanElementBeInMatrix(p)) return default(T);
         return Elements.TryGetValue(p, out T? value) ? value : default(T);
     }
 
     protected bool SetElement(Point2 p,T value){
-        if (!IsElementInMatrix(p)) return false;
+        if (!CanElementBeInMatrix(p)) return false;
         Elements[p] = value;
         return true;
     }
 
     protected bool DeleteElement(Point2 p) => Elements.Remove(p);
 
-    private bool IsElementInMatrix(Point2 p){
-
+    private bool CanElementBeInMatrix(Point2 p){
         if (p.x < 0 && p.x >= this.Dimension.x) return false;
         if (p.y < 0 && p.y >= this.Dimension.y) return false;
         return true;

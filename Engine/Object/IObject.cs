@@ -6,15 +6,14 @@ using PhysicsEngine;
 using Utils;
 namespace Object;
 
-public class StillObject{
-    public Sprite Skin{ get; protected set; }
-    public Body Body{ get; protected set; }
-    public bool IsTangible { get; protected set; } = true;
-    public Point2 AbsolutePosition{ get; set; }
-    public StillObject(Point2 dimension, Point2 position) {
+public class DumbObject{
+    public Sprite Skin{ get; private set; }
+    public Body Body{ get; private set; }
+    public Point2 AbsolutePosition{ get; private set; }
+    public DumbObject(Point2 dimension, Point2 position) {
         this.Skin = new(dimension,new(0,0));
         this.Body = new(dimension,new(0,0));
-        this.AbsolutePosition = position;        
+        SetAbsolutePosition(position); 
     }
     public bool SetAbsolutePosition(Point2 p){
         AbsolutePosition = p;
@@ -22,18 +21,18 @@ public class StillObject{
     }
 }
 #pragma warning disable CS8618 
-public abstract class PhysicsObject{
-    public StillObject StillObject;
+public abstract class Object{
+    public DumbObject DumbObject{ get; set; }
     public Engine.Engine Engine;
-    public void SetStillObject(StillObject stillObject){
-        this.StillObject = stillObject;
+    public void SetStillObject(DumbObject stillObject){
+        this.DumbObject = stillObject;
     }
-    public void BeforeLoop(Engine.Engine engine){
+    public void Setup(Engine.Engine engine){
         this.Engine = engine;
-        if(StillObject is null)return ;
-        Loop();
+        if(DumbObject is null)return ;
     }
+    public abstract void Start();
     public abstract void Loop();
-    public bool Move(Point2 v) => Engine?.PhisicsEngine?.Move(StillObject, v) ?? false;
-    public bool Translate(Point2 v) => Engine?.PhisicsEngine?.Traslate(StillObject, v)??false;
+    public bool Move(Point2 v) => Engine?.PhisicsEngine?.Move(DumbObject, v) ?? false;
+    public bool Translate(Point2 v) => Engine?.PhisicsEngine?.Traslate(DumbObject, v)??false;
 }

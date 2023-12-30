@@ -1,7 +1,6 @@
-using System.Security.Cryptography.X509Certificates;
-using GraphicsEngine;
+using Graphics;
+using Graphics.GraphicsEngine;
 using InputEngine;
-using Object;
 using PhysicsEngine;
 
 namespace Engine;
@@ -29,10 +28,11 @@ public abstract partial class Engine{
     public virtual void BeforeStartLoop()
     {
         this.InputEngine.StartUpdateInput();
+        this.ResourceEngine.PhGetAllObjects().ForEach(x => x.Setup(this));
     }
     public virtual void AfterEndLoop() {}
     public virtual void BeforeRefresh(){
-        this.ResourceEngine.PhGetAllObjects().ForEach(x => x.BeforeLoop(this));
+        ResourceEngine.PhGetAllObjects().ForEach(x=>x.Loop());
     }
     public virtual void AfterRefresh(){}
     public void StartLoop(){
@@ -45,7 +45,7 @@ public abstract partial class Engine{
     private void Loop(){
         while(StatusLoop){
             BeforeRefresh();
-            this.GraphicsEngine.ShowFrame(ResourceEngine.GetAllObjects());
+            this.GraphicsEngine.ShowFrame(ResourceEngine.GetAllObjects().Select(x=>new DtoGraphicsEngine(x.Skin,x.AbsolutePosition)).ToList());
             AfterRefresh();
             Thread.Sleep(TimeFrame);
         }
