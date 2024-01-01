@@ -3,14 +3,16 @@ using Utils;
 public class Matrix<T>{
     protected Dictionary<Point2, T> Elements{ get;set; }
     public Point2 Dimension { get; private set; }
-    protected Matrix(Point2 dimension){
+    private T Default_value;
+    protected Matrix(Point2 dimension,T default_value){
         Elements = new();
         Dimension = dimension;
+        Default_value = default_value;
     }
 
     protected T? GetElement(Point2 p){
-        if (!CanElementBeInMatrix(p)) return default(T);
-        return Elements.TryGetValue(p, out T? value) ? value : default(T);
+        if (!CanElementBeInMatrix(p)) return Default_value;
+        return Elements.TryGetValue(p, out T? value) ? value : Default_value;
     }
 
     protected bool SetElement(Point2 p,T value){
