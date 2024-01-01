@@ -15,23 +15,23 @@ public class ColorGraphicsEngine : IGraphicsEngine
     public override void ShowEmptyFrame()=> this.Display.ShowEmptyFrame();
     public override void ShowFrame(List<DtoGraphicsEngine> sprites)
     {
+        this.Display.ShowEmptyFrame();
         PixelsMatrix newMatrix= new(Display.Dimension,1);
         foreach (var o in sprites)
-            for (int y = 0; y < o.Sprite.Dimension.y; y++)
-                for (int x = 0; x < o.Sprite.Dimension.x; x++)
+            for (int y = 0; y < o.Sprite.Data.Dimension.y; y++)
+                for (int x = 0; x < o.Sprite.Data.Dimension.x; x++)
                 {
                     Point2 pixelPosition = new(x, y);
                     newMatrix.SetPixel(o.AbsolutePosition.Plus(pixelPosition.Plus(o.Sprite.Position)),
                          o.Sprite.Data.GetPixel(pixelPosition));
                 }
-        Display.NewLine();
+        
         this.PrintFrame(newMatrix);
-        Display.NewLine(); 
     }
-    public void PrintFrame(IPixelsMatrix frame)
+    public void PrintFrame(PixelsMatrix frame)
     {
         Pixel tPixel;
-        Pixel marcherPixel = new("|", new() { Color = "white" });
+        Pixel marcherPixel = new("|");
         Display.NewLine();
         for (int y = this.Display.Dimension.y-1; y>=0; y--)
         {
@@ -48,6 +48,7 @@ public class ColorGraphicsEngine : IGraphicsEngine
             Display.NewLine();
         }
         Display.NewLine();
+        Display.FinishPrintFrame();
 
     }
 

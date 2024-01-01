@@ -19,19 +19,23 @@ public class DumbObject{
         AbsolutePosition = p;
         return true;
     }
+    public void RotateOf90(){
+        Skin.RotateSkinOf90();
+        Body.RotateBodyOf90();
+    }
+
 }
 #pragma warning disable CS8618 
-public abstract class Object{
+public abstract class IObject{
     public DumbObject DumbObject{ get; set; }
-    public Engine.Engine Engine;
+    public Engine.IEngine Engine;
     public void SetStillObject(DumbObject stillObject){
         this.DumbObject = stillObject;
     }
-    public void Setup(Engine.Engine engine){
+    public void Setup(Engine.IEngine engine){
         this.Engine = engine;
         if(DumbObject is null)return ;
     }
-    public abstract void Start();
     public abstract void Loop();
     public bool Move(Point2 v) => Engine?.PhisicsEngine?.Move(DumbObject, v) ?? false;
     public bool Translate(Point2 v) => Engine?.PhisicsEngine?.Traslate(DumbObject, v)??false;

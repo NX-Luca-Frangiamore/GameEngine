@@ -1,6 +1,6 @@
 namespace InputEngine;
 public abstract class IInput{
-    public string? state=null;
+    public string? keyPressed=null;
     public abstract void StartUpdateInput(); 
 
     private int _delay=500;
