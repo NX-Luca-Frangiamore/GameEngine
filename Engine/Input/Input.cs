@@ -6,13 +6,13 @@ class ConsoleInput : IInput
         Task.Run(() => {
             while (true)
             {
-                state = Console.ReadKey(true).KeyChar switch
+                keyPressed = Console.ReadKey(true).KeyChar switch
                 {
                     'a' => "left",
                     'w' => "up",
                     'd' => "right",
                     's' => "down",
-                    _ => state
+                    _ => keyPressed
                 };
                 Thread.Sleep(Delay);
             }

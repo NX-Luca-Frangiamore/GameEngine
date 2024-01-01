@@ -18,8 +18,8 @@ public class ColorGraphicsEngine : IGraphicsEngine
         this.Display.ShowEmptyFrame();
         PixelsMatrix newMatrix= new(Display.Dimension,1);
         foreach (var o in sprites)
-            for (int y = 0; y < o.Sprite.Dimension.y; y++)
-                for (int x = 0; x < o.Sprite.Dimension.x; x++)
+            for (int y = 0; y < o.Sprite.Data.Dimension.y; y++)
+                for (int x = 0; x < o.Sprite.Data.Dimension.x; x++)
                 {
                     Point2 pixelPosition = new(x, y);
                     newMatrix.SetPixel(o.AbsolutePosition.Plus(pixelPosition.Plus(o.Sprite.Position)),
@@ -28,7 +28,7 @@ public class ColorGraphicsEngine : IGraphicsEngine
         
         this.PrintFrame(newMatrix);
     }
-    public void PrintFrame(IPixelsMatrix frame)
+    public void PrintFrame(PixelsMatrix frame)
     {
         Pixel tPixel;
         Pixel marcherPixel = new("|");

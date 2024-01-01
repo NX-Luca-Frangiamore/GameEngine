@@ -20,8 +20,8 @@ public class DumbGraphicsEngine : IGraphicsEngine
         this.Display.ShowEmptyFrame();
         PixelsMatrix newMatrix= new(Display.Dimension,NCharactersPixel);
         foreach (var o in dtoSprites)
-            for (int y = 0; y < o.Sprite.Dimension.y; y++)
-                for (int x = 0; x < o.Sprite.Dimension.x; x++)
+            for (int y = 0; y < o.Sprite.Data.Dimension.y; y++)
+                for (int x = 0; x < o.Sprite.Data.Dimension.x; x++)
                 {
                     Point2 pixelPosition = new(x, y);
                     newMatrix.SetPixel(o.AbsolutePosition.Plus(pixelPosition.Plus(o.Sprite.Position)),
@@ -32,7 +32,7 @@ public class DumbGraphicsEngine : IGraphicsEngine
  
     }
 
-    private void PrintFrame(IPixelsMatrix matrix){
+    private void PrintFrame(PixelsMatrix matrix){
         for (int y = matrix.Dimension.y-1; y >=0; y--)
         {
             foreach (Pixel? pixel in TransformLookLine(matrix.GetLine(y)!))

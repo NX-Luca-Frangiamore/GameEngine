@@ -26,7 +26,19 @@ public class Matrix<T>{
         if (p.y < 0 && p.y >= this.Dimension.y) return false;
         return true;
     }
-   public static bool IsAOverLapB(Point2 positionA,Point2 sizeA,Point2 positionB,Point2 sizeB){
+    protected  Dictionary<Point2, T> GetMatrixWithRotationOf90() {
+        Dictionary<Point2, T> matrix = new();
+        for (int y = 0; y < Dimension.y; y++)
+            for (int x = 0; x < Dimension.x; x++){
+                if( this.GetElement(new(x, y)) is T v){
+                    Point2 nuovaPosizione = new Point2(y, Dimension.x - x - 1);
+                    matrix[nuovaPosizione] = v;
+                }
+            }
+        return matrix;
+
+    }
+    public static bool IsAOverLapB(Point2 positionA,Point2 sizeA,Point2 positionB,Point2 sizeB){
         bool xOverlap = positionA.x < positionB.x + sizeB.x &&
                         positionB.x < positionA.x + sizeA.x;
 
@@ -35,5 +47,5 @@ public class Matrix<T>{
 
         return xOverlap && yOverlap;
     }
-
+    
 }

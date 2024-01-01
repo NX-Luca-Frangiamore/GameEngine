@@ -21,33 +21,27 @@ public abstract partial class IEngine{
         this.InputEngine = inputEngine;
         this.ResourceEngine = resourceEngine;
     }
-
-    public virtual void BeforeStartLoop()
-    {  
-
+    public void Start(){
         this.InputEngine.StartUpdateInput();
         this.ResourceEngine.PhGetAllObjects().ForEach(x => x.Setup(this));
-    }
-    public virtual void AfterEndLoop() {}
-    public virtual void BeforeRefresh(){
-        ResourceEngine.PhGetAllObjects().ForEach(x=>x.Loop());
-    }
-    public virtual void AfterRefresh(){}
-    public void StartLoop(){
         BeforeStartLoop();
         StatusLoop = true;
         Loop();
         AfterEndLoop();
     }
-
+    public void Stop()=>this.StatusLoop = false;
+    public virtual void BeforeStartLoop(){}
+    public virtual void AfterEndLoop() {}
+    public virtual void BeforeRefresh(){}
+    public virtual void AfterRefresh(){}
     private void Loop(){
         while(StatusLoop){
             BeforeRefresh();
+             ResourceEngine.PhGetAllObjects().ForEach(x=>x.Loop());
             this.GraphicsEngine.ShowFrame(ResourceEngine.GetAllObjects().Select(x=>new DtoGraphicsEngine(x.Skin,x.AbsolutePosition)).ToList());
             AfterRefresh();
             Thread.Sleep(DelayFrame);
         }
     }
 
-    public void StopLoop()=>this.StatusLoop = false;
 }

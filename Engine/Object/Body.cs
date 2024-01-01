@@ -9,4 +9,7 @@ public class Body{
         this.Position = position;
         this.Dimension = dimension;
     }
+    public void RotateBodyOf90(){
+        Dimension = new(Dimension.y, Dimension.x);
+    }
 }
