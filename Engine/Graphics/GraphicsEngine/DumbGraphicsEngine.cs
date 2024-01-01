@@ -17,6 +17,7 @@ public class DumbGraphicsEngine : IGraphicsEngine
 
     public override void ShowFrame(List<DtoGraphicsEngine> dtoSprites)
     {
+        this.Display.ShowEmptyFrame();
         PixelsMatrix newMatrix= new(Display.Dimension,NCharactersPixel);
         foreach (var o in dtoSprites)
             for (int y = 0; y < o.Sprite.Dimension.y; y++)
@@ -26,9 +27,8 @@ public class DumbGraphicsEngine : IGraphicsEngine
                     newMatrix.SetPixel(o.AbsolutePosition.Plus(pixelPosition.Plus(o.Sprite.Position)),
                          o.Sprite.Data.GetPixel(pixelPosition));
                 }
-        Display.NewLine();
+      
         this.PrintFrame(newMatrix);
-        Display.NewLine();
  
     }
 
@@ -41,6 +41,7 @@ public class DumbGraphicsEngine : IGraphicsEngine
             }
             Display.NewLine();
         }
+        Display.FinishPrintFrame();
     }
 
     private IEnumerable<Pixel> TransformLookLine(IEnumerable<Pixel> line){

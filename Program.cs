@@ -14,7 +14,7 @@ void StartEngine(Type typeLinkAssembly)
     var builder = Host.CreateApplicationBuilder(args);
     builder.Services.AddSingleton(new ObjectResource());
     builder.Services.AddSingleton<IPhisicsEngine, BasePhysicsEngine>();
-    builder.Services.AddSingleton<IDisplay, ConsoleMulticolorDisplay>();
+    builder.Services.AddSingleton<IDisplay, ConsoleMonoColorDisplay>();
     builder.Services.AddSingleton<IGraphicsEngine, ColorGraphicsEngine>();
     builder.Services.AddSingleton<IInput, ConsoleInput>();
     builder.Services.AddSingleton<IEngine, Game>();
@@ -32,7 +32,8 @@ public class Game :IEngine
                 : base(phisicsEngine, graphicsEngine, inputEngine, resourceEngine)
     {
         this.InputEngine.Delay = 100;
-        DelayFrame = 250;
+        DelayFrame = 300;
+        
        
     }
 }
