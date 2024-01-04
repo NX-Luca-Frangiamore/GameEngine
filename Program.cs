@@ -38,30 +38,33 @@ public class Game :IEngine
 class Nave : IObject
 {
     private Point2 Speed = new(0, 0);
+
     public Nave()
     {
-        DumbObject stillObject = new(new(1, 2), new(6, 1));
+        DumbObject stillObject = new(new(2, 1), new(6, 1));
         stillObject.Skin.Data.FillWith("o");
         stillObject.Skin.Data.SetPixel(new(0, 0), new("A", new() { Color = "red" }));
         SetStillObject(stillObject);
-        DumbObject.RotateOf90();
-        DumbObject.RotateOf90();
-        DumbObject.RotateOf90();
-
     }
     public override void Loop()
     {
         Speed = MappingInputToVector2(this.Engine.InputEngine.keyPressed);
-        this.Move(Speed);
+        if(!IsInCollision)
+            this.Move(Speed);
     }
+    public override void OnCollisionBy(string nameObject)
+    {
+        Move(new(-Speed.x, -Speed.y));
+        this.Engine.InputEngine.Reset();
 
+    }
     private Point2 MappingInputToVector2(string? key) => key switch
     {
         "left" => new Point2(-1, 0),
         "right" => new Point2(1, 0),
         "up" => new Point2(0, 1),
         "down" => new Point2(0, -1),
-        _ => this.Speed,
+        _ => new(0,0),
     };
 }
 public class Wall : IObject

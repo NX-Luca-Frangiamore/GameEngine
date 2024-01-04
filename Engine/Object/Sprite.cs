@@ -4,6 +4,7 @@ using Utils;
 public class Sprite{
     public Point2 Position{ get; set; }
     public PixelsMatrix Data{ get; set; }
+    public bool IsVisible=true;
     public Sprite(Point2 dimension,Point2 position){
         this.Position = position;
         this.Data = new(dimension, 1);

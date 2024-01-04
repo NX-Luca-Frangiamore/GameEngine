@@ -5,7 +5,7 @@ namespace Graphics;
 public class PixelsMatrix: Matrix<Pixel>
 {
     public int NCharactersPixel { get; private set; }
-    public PixelsMatrix(Point2 dimension, int nCharactersPixel):base (dimension)
+    public PixelsMatrix(Point2 dimension, int nCharactersPixel):base (dimension,new(" "))
     {
         this.NCharactersPixel = nCharactersPixel;
     }

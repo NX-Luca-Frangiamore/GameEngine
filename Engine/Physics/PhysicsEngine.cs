@@ -7,19 +7,33 @@ public class BasePhysicsEngine : IPhisicsEngine
 {
     public BasePhysicsEngine(ObjectResource objectsReferents) : base(objectsReferents){}
     public override bool Traslate(DumbObject body, Point2 v)=>body.SetAbsolutePosition(v);
-    public override bool Move(DumbObject body, Point2 v)
+    public override bool Move(IObject body, Point2 v)
     {
-        if (body.Body.IsTangible)
+        if (body.DumbObject.Body.IsTangible)
             if (AreRectangleBodyOverlapped(body, v)) return false;
-        return body.SetAbsolutePosition(body.AbsolutePosition.Plus(v));
-    }
-    public bool AreRectangleBodyOverlapped(DumbObject body, Point2 v){
-        foreach(var o in this.ObjectsReferets.GetAllObjects()){
+        return body.DumbObject.SetAbsolutePosition(body.DumbObject.AbsolutePosition.Plus(v));
+    }//TODO: utilizzare la collisionmatrix
+    public bool AreRectangleBodyOverlapped(IObject body, Point2 v){
+        bool thereAreOverlapped=false;
+        foreach (var o in this.ObjectsReferets.PhGetAllObjects()){
             if (o == body)continue;
-            if (!o.Body.IsTangible) break;
-            if (Matrix<object>.IsAOverLapB(o.AbsolutePosition.Plus(o.Body.Position), o.Body.Dimension,
-                                          body.AbsolutePosition.Plus(body.Body.Position).Plus(v), body.Body.Dimension))return true;
+            if (!o.DumbObject.Body.IsTangible) break;
+            if (Matrix<object>.IsAOverLapB(o.DumbObject.AbsolutePosition.Plus(o.DumbObject.Body.Position), o.DumbObject.Body.Dimension,
+                                          body.DumbObject.AbsolutePosition.Plus(body.DumbObject.Body.Position).Plus(v), body.DumbObject.Body.Dimension))
+            {
+
+                o.IsInCollision = true;
+                o.OnCollisionBy(body.Name);
+                body.IsInCollision = false;
+                body.OnCollisionBy(o.Name);
+                thereAreOverlapped = true;
+                
+            }
+            else { 
+                o.IsInCollision=false;
+                body.IsInCollision = false;   
+            }
         }
-        return false;
+        return thereAreOverlapped;
     }
 }

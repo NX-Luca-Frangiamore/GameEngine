@@ -10,6 +10,14 @@ public class DumbObject{
     public Sprite Skin{ get; private set; }
     public Body Body{ get; private set; }
     public Point2 AbsolutePosition{ get; private set; }
+    private bool _isActive=true;
+   
+    public bool IsActive { get{ return _isActive; }
+                           set { _isActive = value;
+                               Body.IsTangible = value;
+                               Skin.IsVisible = value;
+                         } 
+    }
     public DumbObject(Point2 dimension, Point2 position) {
         this.Skin = new(dimension,new(0,0));
         this.Body = new(dimension,new(0,0));
@@ -23,12 +31,13 @@ public class DumbObject{
         Skin.RotateSkinOf90();
         Body.RotateBodyOf90();
     }
-
 }
 #pragma warning disable CS8618 
 public abstract class IObject{
     public DumbObject DumbObject{ get; set; }
     public Engine.IEngine Engine;
+    public string Name;
+    public bool IsInCollision;
     public void SetStillObject(DumbObject stillObject){
         this.DumbObject = stillObject;
     }
@@ -37,6 +46,7 @@ public abstract class IObject{
         if(DumbObject is null)return ;
     }
     public abstract void Loop();
-    public bool Move(Point2 v) => Engine?.PhisicsEngine?.Move(DumbObject, v) ?? false;
-    public bool Translate(Point2 v) => Engine?.PhisicsEngine?.Traslate(DumbObject, v)??false;
+    public virtual void OnCollisionBy(string nameObject) { }
+    public bool Move(Point2 v) => Engine?.PhisicsEngine?.Move(this, v) ?? false;
+    public bool Traslate(Point2 v) => Engine?.PhisicsEngine?.Traslate(DumbObject, v)??false;
 }

@@ -18,6 +18,7 @@ public class ObjectResource{
             string? name = singleClass.FullName;
             IObject? objectCreated = (IObject)Activator.CreateInstance(singleClass)!;
             if (name is null || objectCreated is null) continue;
+            objectCreated.Name=name;
             AddNewObject(name,objectCreated);
         }    
     }
