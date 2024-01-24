@@ -17,6 +17,7 @@ void StartEngine(Type typeLinkAssembly)
     builder.Services.AddSingleton<IDisplay, ConsoleMulticolorDisplay>();
     builder.Services.AddSingleton<IGraphicsEngine, ColorGraphicsEngine>();
     builder.Services.AddSingleton<IInput, ConsoleInput>();
+    builder.Services.AddSingleton<Invoker.Invoker>();
     builder.Services.AddSingleton<IEngine, Game>();
     var host = builder.Build();
         var engine= host.Services.GetRequiredService<IEngine>();
@@ -25,11 +26,12 @@ void StartEngine(Type typeLinkAssembly)
     host.Run();
 }
 StartEngine(typeof(Nave));
+
 public class Game :IEngine
 {
     public Game(IPhisicsEngine phisicsEngine, IGraphicsEngine graphicsEngine,
-                 IInput inputEngine, ObjectResource resourceEngine)
-                : base(phisicsEngine, graphicsEngine, inputEngine, resourceEngine)
+                 IInput inputEngine, ObjectResource resourceEngine,Invoker.Invoker invoker)
+                : base(phisicsEngine, graphicsEngine, inputEngine, resourceEngine,invoker)
     {
         this.InputEngine.Delay = 100;
         DelayFrame = 300;   
@@ -37,26 +39,26 @@ public class Game :IEngine
 }
 class Nave : IObject
 {
-    private Point2 Speed = new(0, 0);
+    private Point2 Speed = new(1, 0);
 
     public Nave()
     {
-        DumbObject stillObject = new(new(2, 1), new(6, 1));
+        DumbObject stillObject = new(new(2, 1), new(2, 1));
         stillObject.Skin.Data.FillWith("o");
         stillObject.Skin.Data.SetPixel(new(0, 0), new("A", new() { Color = "red" }));
         SetStillObject(stillObject);
     }
     public override void Loop()
     {
-        Speed = MappingInputToVector2(this.Engine.InputEngine.keyPressed);
-        if(!IsInCollision)
-            this.Move(Speed);
+       // if(!IsInCollision)
+        //    Move(Speed);
+        Invoker.Add(new GetKeyboard(this));
+        Move(Speed);
+
     }
     public override void OnCollisionBy(string nameObject)
     {
         Move(new(-Speed.x, -Speed.y));
-        this.Engine.InputEngine.Reset();
-
     }
     private Point2 MappingInputToVector2(string? key) => key switch
     {
@@ -67,6 +69,7 @@ class Nave : IObject
         _ => new(0,0),
     };
 }
+
 public class Wall : IObject
 {
     public Wall()

@@ -2,14 +2,12 @@ using Utils;
 
 namespace Object;
 public class Body{
-    public Point2 Position{ get; set; }
     public bool IsTangible { get; set; } = true;
-    public Point2 Dimension{ get;private set; }
-    public Body(Point2 dimension,Point2 position){
-        this.Position = position;
-        this.Dimension = dimension;
+    public CollisionMatrix Part{get;private set;}
+    public Point2 Position{get;private set;}
+    public Body(CollisionMatrix part,Point2 position){
+        Part=part;
+        Position=position;
     }
-    public void RotateBodyOf90(){
-        Dimension = new(Dimension.y, Dimension.x);
-    }
+    public void RotateBodyOf90()=>Part=Part.GetCollisionMatrixRotatedOf90();
 }

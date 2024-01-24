@@ -3,37 +3,54 @@ using Object;
 using Utils;
 
 namespace PhysicsEngine;
-public class BasePhysicsEngine : IPhisicsEngine
+public class BasePhysicsEngine(ObjectResource ObjectsReferents) : IPhisicsEngine
 {
-    public BasePhysicsEngine(ObjectResource objectsReferents) : base(objectsReferents){}
     public override bool Traslate(DumbObject body, Point2 v)=>body.SetAbsolutePosition(v);
-    public override bool Move(IObject body, Point2 v)
-    {
-        if (body.DumbObject.Body.IsTangible)
-            if (AreRectangleBodyOverlapped(body, v)) return false;
-        return body.DumbObject.SetAbsolutePosition(body.DumbObject.AbsolutePosition.Plus(v));
-    }//TODO: utilizzare la collisionmatrix
-    public bool AreRectangleBodyOverlapped(IObject body, Point2 v){
-        bool thereAreOverlapped=false;
-        foreach (var o in this.ObjectsReferets.PhGetAllObjects()){
-            if (o == body)continue;
-            if (!o.DumbObject.Body.IsTangible) break;
-            if (Matrix<object>.IsAOverLapB(o.DumbObject.AbsolutePosition.Plus(o.DumbObject.Body.Position), o.DumbObject.Body.Dimension,
-                                          body.DumbObject.AbsolutePosition.Plus(body.DumbObject.Body.Position).Plus(v), body.DumbObject.Body.Dimension))
-            {
+    //public override bool Move(IObject body, Point2 v)
+    //{
+    //    if (body.DumbObject.Body.IsTangible)
+    //        if (AreRectangleBodyOverlapped(body, v)) return false;
+    //    return body.DumbObject.SetAbsolutePosition(body.DumbObject.AbsolutePosition.Plus(v));
+    //}//TODO: utilizzare la collisionmatrix
+    //public bool AreRectangleBodyOverlapped(IObject body, Point2 v){
+    //    bool thereAreOverlapped=false;
+    //    foreach (var o in ObjectsReferents.PhGetAllObjects()){
+    //        if (o == body)continue;
+    //        if (!o.DumbObject.Body.IsTangible) break;
+    //        if (Matrix<object>.IsAOverLapB(o.DumbObject.AbsolutePosition.Plus(o.DumbObject.Body.Position), o.DumbObject.BodyDimension,
+    //                                      body.DumbObject.AbsolutePosition.Plus(body.DumbObject.Body.Position).Plus(v), body.DumbObject.Body.Dimension))
+    //        {
+//
+    //            o.IsInCollision = true;
+    //            o.OnCollisionBy(body.Name);
+    //            body.IsInCollision = false;
+    //            body.OnCollisionBy(o.Name);
+    //            thereAreOverlapped = true;
+    //            
+    //        }
+    //        else { 
+    //            o.IsInCollision=false;
+    //            body.IsInCollision = false;   
+    //        }
+    //    }
+    //    return thereAreOverlapped;
+    //}
 
-                o.IsInCollision = true;
-                o.OnCollisionBy(body.Name);
-                body.IsInCollision = false;
-                body.OnCollisionBy(o.Name);
-                thereAreOverlapped = true;
-                
-            }
-            else { 
-                o.IsInCollision=false;
-                body.IsInCollision = false;   
+    public override bool AreThereCollisions(IObject body, Point2 position)
+    {
+        Point2 absolutePositionBody=body.DumbObject.AbsolutePosition.Plus(body.DumbObject.Body.Position);
+
+        foreach(var part in body.DumbObject.Body.Part.Elements){
+            if(!part.Value)continue;
+            var absolutePositionPart=absolutePositionBody.Plus(part.Key);
+            
+            foreach(var otherObject in ObjectsReferents.GetAllObjects()){
+                if(otherObject==body.DumbObject)continue;
+                if(otherObject.Body.Part.Elements.Any(x=>x.Value && x.Key.Plus(otherObject.AbsolutePosition.Plus(otherObject.Body.Position))==absolutePositionPart))
+                    return true;
             }
         }
-        return thereAreOverlapped;
+        return false;
     }
 }
+//o.AbsolutePosition.Plus(pixelPosition.Plus(o.Sprite.Position))

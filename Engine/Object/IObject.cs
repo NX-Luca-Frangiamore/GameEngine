@@ -2,6 +2,7 @@ using System.Dynamic;
 using System.Net.NetworkInformation;
 using Engine;
 using Graphics;
+using Invoker;
 using PhysicsEngine;
 using Utils;
 namespace Object;
@@ -20,7 +21,7 @@ public class DumbObject{
     }
     public DumbObject(Point2 dimension, Point2 position) {
         this.Skin = new(dimension,new(0,0));
-        this.Body = new(dimension,new(0,0));
+        this.Body = new(new CollisionMatrix(dimension),new(0,0));
         AbsolutePosition = position;
     }
     public bool SetAbsolutePosition(Point2 p){
@@ -35,18 +36,15 @@ public class DumbObject{
 #pragma warning disable CS8618 
 public abstract class IObject{
     public DumbObject DumbObject{ get; set; }
-    public Engine.IEngine Engine;
+    public Invoker.Invoker Invoker;
     public string Name;
     public bool IsInCollision;
+    public void SetUp(Invoker.Invoker invoker){Invoker=invoker;}
     public void SetStillObject(DumbObject stillObject){
         this.DumbObject = stillObject;
     }
-    public void Setup(Engine.IEngine engine){
-        this.Engine = engine;
-        if(DumbObject is null)return ;
-    }
     public abstract void Loop();
     public virtual void OnCollisionBy(string nameObject) { }
-    public bool Move(Point2 v) => Engine?.PhisicsEngine?.Move(this, v) ?? false;
-    public bool Traslate(Point2 v) => Engine?.PhisicsEngine?.Traslate(DumbObject, v)??false;
+    public void Move(Point2 v) =>Invoker.Add(new MoveCommand(this,v));
+    //public void Traslate(Point2 v) => ;
 }

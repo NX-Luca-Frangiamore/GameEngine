@@ -15,15 +15,17 @@ public abstract partial class IEngine{
     public IInput InputEngine;
     public ObjectResource ResourceEngine;
     public IGraphicsEngine GraphicsEngine;
-    public IEngine(IPhisicsEngine phisicsEngine,IGraphicsEngine graphicsEngine,IInput inputEngine,ObjectResource resourceEngine){
+    public Invoker.Invoker Invoker;
+    public IEngine(IPhisicsEngine phisicsEngine,IGraphicsEngine graphicsEngine,IInput inputEngine,ObjectResource resourceEngine,Invoker.Invoker invoker){
         this.PhisicsEngine = phisicsEngine;
         this.GraphicsEngine = graphicsEngine;
         this.InputEngine = inputEngine;
         this.ResourceEngine = resourceEngine;
+        this.Invoker=invoker;
     }
     public void Start(){
         this.InputEngine.StartUpdateInput();
-        this.ResourceEngine.PhGetAllObjects().ForEach(x => x.Setup(this));
+        this.ResourceEngine.PhGetAllObjects().ForEach(x => x.SetUp(Invoker));
         BeforeStartLoop();
         StatusLoop = true;
         Loop();
@@ -37,7 +39,8 @@ public abstract partial class IEngine{
     private void Loop(){
         while(StatusLoop){
             BeforeRefresh();
-             ResourceEngine.PhGetAllObjects().ForEach(x=>x.Loop());
+            Invoker.Execute(this);
+            ResourceEngine.PhGetAllObjects().ForEach(x=>x.Loop());
             this.GraphicsEngine.ShowFrame(ResourceEngine.GetAllObjects().Select(x=>new DtoGraphicsEngine(x.Skin,x.AbsolutePosition)).ToList());
             AfterRefresh();
             Thread.Sleep(DelayFrame);

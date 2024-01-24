@@ -1,7 +1,7 @@
 using Utils;
 
 public class Matrix<T>{
-    protected Dictionary<Point2, T> Elements{ get;set; }
+    public Dictionary<Point2, T> Elements{ get;protected set; }
     public Point2 Dimension { get; private set; }
     private T Default_value;
     protected Matrix(Point2 dimension,T default_value){
