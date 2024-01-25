@@ -1,17 +1,18 @@
 using Engine;
+using FluentResults;
 using Object;
 
 public class GetKeyboard : ICommand
 {
-    public GetKeyboard(IObject o) : base(o){}
+    public GetKeyboard(IObject o,CallBack callBack) : base(o,callBack){}
 
-    public override IResult Execute(IEngine engine)
+    public override KeyboardResult OnExecution(IEngine engine)
     {
-        return new ResultKeyboard(engine.InputEngine.keyPressed);
+        return new KeyboardResult{
+            Key=engine.InputEngine.keyPressed
+        };
     }
 }
-public class ResultKeyboard:IResult{
-    public ResultKeyboard(string? key){
-        Specific=key;
-    }
+public class KeyboardResult:IResult{
+  public new string? Key{get;init;}
 }

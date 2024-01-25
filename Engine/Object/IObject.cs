@@ -45,6 +45,6 @@ public abstract class IObject{
     }
     public abstract void Loop();
     public virtual void OnCollisionBy(string nameObject) { }
-    public void Move(Point2 v) =>Invoker.Add(new MoveCommand(this,v));
+    public void Move(Point2 v) =>Invoker.Add(new MoveCommand(this,v,(x)=>{}));
     //public void Traslate(Point2 v) => ;
 }

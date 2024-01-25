@@ -40,7 +40,7 @@ public class Game :IEngine
 class Nave : IObject
 {
     private Point2 Speed = new(1, 0);
-
+    private int i=0;
     public Nave()
     {
         DumbObject stillObject = new(new(2, 1), new(2, 1));
@@ -52,7 +52,11 @@ class Nave : IObject
     {
        // if(!IsInCollision)
         //    Move(Speed);
-        Invoker.Add(new GetKeyboard(this));
+        Invoker.Add(new GetKeyboard(this,(x)=>{
+            Speed= new(i, 0);
+            i++;
+            //MappingInputToVector2(x.Key);
+        }));
         Move(Speed);
 
     }
