@@ -20,7 +20,18 @@ public class Matrix<T>{
         Elements[p] = value;
         return true;
     }
-
+    public void ExecuteForAllElement(Action<T> act)
+    {
+        for (int y = 0; y < Dimension.y; y++)
+            for (int x = 0; x < Dimension.x; x++)
+                act(this.Elements[new(y, x)]);
+    }
+    public void AddInAllElement(T date)
+    {
+        for (int y = 0; y < Dimension.y; y++)
+            for (int x = 0; x < Dimension.x; x++)
+                SetElement(new(y, x), date);
+    }
     protected bool DeleteElement(Point2 p) => Elements.Remove(p);
 
     private bool CanElementBeInMatrix(Point2 p){

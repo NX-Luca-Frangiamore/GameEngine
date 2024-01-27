@@ -5,7 +5,6 @@ using Utils;
 namespace Invoker;
 public class Invoker
 {
-  //  private List<ICommand<IResult>> Commands = new List<ICommand<IResult>>();
     private List<ICommand>Commands=new List<ICommand>();
     public void Add(ICommand command)
     {
@@ -22,19 +21,17 @@ public class Invoker
 public class MoveCommand: ICommand
 {
     private Point2 Move;
-    public MoveCommand(IObject o,Point2 move,CallBack callBack):base(o,callBack){
+    public MoveCommand(IObject o,Point2 move,CallBack? callBack=default):base(o,callBack){
       Move=move;
     }
     public override MoveResult OnExecution(IEngine engine)
     {
-        if(engine.PhisicsEngine.AreThereCollisions(o,Move))return new MoveResult{CanMove=false};
+        if(engine.PhisicsEngine.AreThereCollisions(o,Move))return new MoveResult(false);
 
         o.DumbObject.SetAbsolutePosition(o.DumbObject.AbsolutePosition.Plus(Move));
-        return new MoveResult{CanMove=false};
+        return new MoveResult(true);
     }
 }
 public class MoveResult:IResult{
-    public new bool CanMove;
-    public new string? BlockedFrom;
-    public new string? Description;
+    public MoveResult(bool canMove)=>AddResults("canMove",canMove);
 }

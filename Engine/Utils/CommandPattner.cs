@@ -12,15 +12,24 @@ public abstract class ICommand{
         CallBack = callBack??((x)=>{});
     }
     public void Execute(IEngine engine){
-
         CallBack(OnExecution(engine));
     }
     public abstract IResult OnExecution(IEngine engine);
 }
 public abstract class IResult { 
-    public virtual string? Key{get;init;}
-    public virtual bool? CanMove{get;init;}
-    public virtual string? BlockedFrom{get;init;}
-    public virtual string? Description{get;init;}
+    public Dictionary<string,object>Results=new();
+    public void AddResults<T>(string key,T data)=>Results[key]=data!;
+    public T? Get<T>(string key){
+        if(!Results.ContainsKey(key))return default;
+        try{
+            return (T)Results[key];
+        }
+        catch(Exception _){
+            return default;
+        }
+    }
+    public override string ToString(){
+        return Results.ToString()!;
+    }
 
 }

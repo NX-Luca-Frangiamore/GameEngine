@@ -11,14 +11,8 @@ public class DumbObject{
     public Sprite Skin{ get; private set; }
     public Body Body{ get; private set; }
     public Point2 AbsolutePosition{ get; private set; }
-    private bool _isActive=true;
    
-    public bool IsActive { get{ return _isActive; }
-                           set { _isActive = value;
-                               Body.IsTangible = value;
-                               Skin.IsVisible = value;
-                         } 
-    }
+    public bool IsInCollision;
     public DumbObject(Point2 dimension, Point2 position) {
         this.Skin = new(dimension,new(0,0));
         this.Body = new(new CollisionMatrix(dimension),new(0,0));
@@ -35,16 +29,22 @@ public class DumbObject{
 }
 #pragma warning disable CS8618 
 public abstract class IObject{
+
+    private bool _isActive=true;
+    public bool IsActive { get{ return _isActive; }
+                           set { _isActive = value;
+                            DumbObject.Body.IsTangible = value;
+                            DumbObject.Skin.IsVisible = value;
+                         } 
+    }
     public DumbObject DumbObject{ get; set; }
     public Invoker.Invoker Invoker;
     public string Name;
-    public bool IsInCollision;
     public void SetUp(Invoker.Invoker invoker){Invoker=invoker;}
     public void SetStillObject(DumbObject stillObject){
         this.DumbObject = stillObject;
     }
     public abstract void Loop();
-    public virtual void OnCollisionBy(string nameObject) { }
-    public void Move(Point2 v) =>Invoker.Add(new MoveCommand(this,v,(x)=>{}));
+    public void Move(Point2 v) =>Invoker.Add(new MoveCommand(this,v,(x)=>{x.Get<bool>("CanMove");}));
     //public void Traslate(Point2 v) => ;
 }

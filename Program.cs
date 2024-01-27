@@ -8,6 +8,7 @@ using Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
+using Invoker;
 
 void StartEngine(Type typeLinkAssembly)
 {
@@ -20,7 +21,7 @@ void StartEngine(Type typeLinkAssembly)
     builder.Services.AddSingleton<Invoker.Invoker>();
     builder.Services.AddSingleton<IEngine, Game>();
     var host = builder.Build();
-        var engine= host.Services.GetRequiredService<IEngine>();
+       var engine= host.Services.GetRequiredService<IEngine>();
         engine.ResourceEngine.CollectObjects(typeLinkAssembly);
         engine.Start();
     host.Run();
@@ -34,18 +35,20 @@ public class Game :IEngine
                 : base(phisicsEngine, graphicsEngine, inputEngine, resourceEngine,invoker)
     {
         this.InputEngine.Delay = 100;
-        DelayFrame = 300;   
-    }
+        DelayFrame = 250;
+        //Invoker.Add(new MoveCommand(new Nave(), new(1,1)));
+        //Invoker.Execute(this);
+    }   
 }
 class Nave : IObject
 {
     private Point2 Speed = new(1, 0);
-    private int i=0;
     public Nave()
     {
-        DumbObject stillObject = new(new(2, 1), new(2, 1));
+        DumbObject stillObject = new(new(1, 1), new(1, 1));
         stillObject.Skin.Data.FillWith("o");
-        stillObject.Skin.Data.SetPixel(new(0, 0), new("A", new() { Color = "red" }));
+        stillObject.Body.Parts.SetTangible(new(0, 0));
+       // stillObject.Skin.Data.SetPixel(new(0, 0), new("A", new() { Color = "red" }));
         SetStillObject(stillObject);
     }
     public override void Loop()
@@ -53,14 +56,12 @@ class Nave : IObject
        // if(!IsInCollision)
         //    Move(Speed);
         Invoker.Add(new GetKeyboard(this,(x)=>{
-            Speed= new(i, 0);
-            i++;
-            //MappingInputToVector2(x.Key);
+            Speed = MappingInputToVector2(x.Get<string>("Key"));
         }));
         Move(Speed);
 
     }
-    public override void OnCollisionBy(string nameObject)
+    public void OnCollisionBy(string nameObject)
     {
         Move(new(-Speed.x, -Speed.y));
     }
@@ -79,6 +80,7 @@ public class Wall : IObject
     public Wall()
     {
         var StillObject = new DumbObject(new(5,5), new(8,1));
+        StillObject.Body.Parts.SetAllTangible();
         SetStillObject(StillObject);
     }
     public override void Loop()

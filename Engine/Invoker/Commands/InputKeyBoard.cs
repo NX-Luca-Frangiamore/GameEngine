@@ -6,13 +6,8 @@ public class GetKeyboard : ICommand
 {
     public GetKeyboard(IObject o,CallBack callBack) : base(o,callBack){}
 
-    public override KeyboardResult OnExecution(IEngine engine)
-    {
-        return new KeyboardResult{
-            Key=engine.InputEngine.keyPressed
-        };
-    }
+    public override IResult OnExecution(IEngine engine) => new KeyboardResult(engine.InputEngine.keyPressed);
 }
 public class KeyboardResult:IResult{
-  public new string? Key{get;init;}
+    public KeyboardResult(string? key)=>AddResults("Key",key);
 }
