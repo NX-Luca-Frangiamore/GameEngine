@@ -3,10 +3,10 @@ using Object;
 
 public delegate void CallBack(IResult result);
 public abstract class ICommand{
-    public IObject o{get;private set;}
+    public Controller o{get;private set;}
     public string FromWho{get;init;}
     private CallBack CallBack;
-    public ICommand(IObject o,CallBack? callBack=default){
+    public ICommand(Controller o,CallBack? callBack=default){
         this.o=o;
         FromWho=o.Name;
         CallBack = callBack??((x)=>{});

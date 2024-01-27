@@ -14,6 +14,8 @@ class ConsoleInput : IInput
                     's' => "down",
                     _ => keyPressed
                 };
+                while (Console.KeyAvailable)Console.ReadKey(true);
+                
                 Thread.Sleep(Delay);
             }
         });

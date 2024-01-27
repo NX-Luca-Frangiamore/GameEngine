@@ -21,14 +21,14 @@ public class Invoker
 public class MoveCommand: ICommand
 {
     private Point2 Move;
-    public MoveCommand(IObject o,Point2 move,CallBack? callBack=default):base(o,callBack){
+    public MoveCommand(Controller o,Point2 move,CallBack? callBack=default):base(o,callBack){
       Move=move;
     }
     public override MoveResult OnExecution(IEngine engine)
     {
         if(engine.PhisicsEngine.AreThereCollisions(o,Move))return new MoveResult(false);
 
-        o.DumbObject.SetAbsolutePosition(o.DumbObject.AbsolutePosition.Plus(Move));
+        o.Entity.SetAbsolutePosition(o.Entity.AbsolutePosition.Plus(Move));
         return new MoveResult(true);
     }
 }

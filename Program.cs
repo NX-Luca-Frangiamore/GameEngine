@@ -35,19 +35,18 @@ public class Game :IEngine
                 : base(phisicsEngine, graphicsEngine, inputEngine, resourceEngine,invoker)
     {
         this.InputEngine.Delay = 100;
-        DelayFrame = 250;
-        //Invoker.Add(new MoveCommand(new Nave(), new(1,1)));
-        //Invoker.Execute(this);
+        DelayFrame = 150;
+       
     }   
 }
-class Nave : IObject
+class Nave : Controller
 {
     private Point2 Speed = new(1, 0);
     public Nave()
     {
-        DumbObject stillObject = new(new(1, 1), new(1, 1));
+        Object.Entity stillObject = new(new(1, 1), new(1, 1));
         stillObject.Skin.Data.FillWith("o");
-        stillObject.Body.Parts.SetTangible(new(0, 0));
+        stillObject.Body.Data.SetTangible(new(0, 0));
        // stillObject.Skin.Data.SetPixel(new(0, 0), new("A", new() { Color = "red" }));
         SetStillObject(stillObject);
     }
@@ -75,12 +74,13 @@ class Nave : IObject
     };
 }
 
-public class Wall : IObject
+public class Wall : Controller
 {
     public Wall()
     {
-        var StillObject = new DumbObject(new(5,5), new(8,1));
-        StillObject.Body.Parts.SetAllTangible();
+        var StillObject = new Entity(new(5,5), new(8,1));
+        StillObject.Skin.Data.FillWith("*");
+        StillObject.Body.Data.SetAllTangible();
         SetStillObject(StillObject);
     }
     public override void Loop()

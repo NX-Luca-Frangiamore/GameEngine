@@ -1,14 +1,14 @@
 using Graphics;
 using Utils;
 
-public class Sprite{
-    public Point2 Position{ get; set; }
-    public PixelsMatrix Data{ get; set; }
+public class Sprite
+{
     public bool IsVisible=true;
+    public Point2 Position;
+    public PixelsMatrix Data { get; private set; }
     public Sprite(Point2 dimension,Point2 position){
-        this.Position = position;
-        this.Data = new(dimension, 1);
-        Data.FillWith("*");
+        Position = position;
+        Data = new(dimension, 1);
     }
-    public void RotateSkinOf90() => Data = Data.GetPixelMatrixRotatedOf90();
+    public void RotateSkinOf90() => Data=Data.GetPixelMatrixRotatedOf90();
 }

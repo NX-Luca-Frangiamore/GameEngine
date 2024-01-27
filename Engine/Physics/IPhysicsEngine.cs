@@ -5,6 +5,6 @@ using Utils;
 
 namespace PhysicsEngine;
 public abstract class IPhisicsEngine{
-    public abstract bool AreThereCollisions(IObject body,Point2 position);
-    public abstract bool Traslate(DumbObject body, Point2 v);
+    public abstract bool AreThereCollisions(Controller body,Point2 position);
+    public abstract void Traslate(Entity body, Point2 v);
 }

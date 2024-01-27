@@ -4,7 +4,7 @@ using Object;
 
 public class GetKeyboard : ICommand
 {
-    public GetKeyboard(IObject o,CallBack callBack) : base(o,callBack){}
+    public GetKeyboard(Controller o,CallBack callBack) : base(o,callBack){}
 
     public override IResult OnExecution(IEngine engine) => new KeyboardResult(engine.InputEngine.keyPressed);
 }
