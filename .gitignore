@@ -485,3 +485,6 @@ $RECYCLE.BIN/
 
 # IntelliJ IDEs (Rider)
 **/.idea/**
+
+.vscode/
+obj/
