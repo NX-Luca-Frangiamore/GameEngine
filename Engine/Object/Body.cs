@@ -9,5 +9,13 @@ public class Body{
         Position=position;
         Data = new CollisionMatrix(dimension);
     }
-    public void RotateBodyOf90()=>Data=Data.GetCollisionMatrixRotatedOf90();
+    public void RotateBody(int angle)
+    {
+        if (angle % 90 != 0) return;
+        int turn = angle / 90;
+        for (int i = 0; i < turn; i++)
+        {
+            Data = Data.GetCollisionMatrixRotatedOf90();
+        }
+    }
 }

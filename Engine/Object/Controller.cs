@@ -37,9 +37,9 @@ public abstract class Controller{
     public void SetUp(Invoker.Invoker invoker){Invoker=invoker;}
     public void SetStillObject(Entity stillObject)=> this.Entity = stillObject;
     public void Move(Point2 v) =>Invoker.Add(new MoveCommand(this,v,(x)=>{x.Get<bool>("CanMove");}));
-    public void RotateOf90(){
-        Entity.Skin.RotateSkinOf90();
-        Entity.Body.RotateBodyOf90();
+    public void Rotate(int angle){
+        Entity.Skin.RotateSkin(angle);
+        Entity.Body.RotateBody(angle);
     }
     public abstract void Loop();
 }

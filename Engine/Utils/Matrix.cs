@@ -9,6 +9,12 @@ public class Matrix<T>{
         Dimension = dimension;
         Default_value = default_value;
     }
+    protected Matrix(Point2 dimension, T default_value, Dictionary<Point2, T> elements)
+    {
+        Elements = elements;
+        Dimension = dimension;
+        Default_value = default_value;
+    }
 
     protected T? GetElement(Point2 p){
         if (!CanElementBeInMatrix(p)) return Default_value;
