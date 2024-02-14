@@ -1,9 +1,6 @@
-using System.Dynamic;
-using System.Net.NetworkInformation;
-using Engine;
-using Graphics;
-using Invoker;
-using PhysicsEngine;
+
+using GameEngine.Engine.InvokerEngine;
+using GameEngine.Engine.InvokerEngine.Commands;
 using Utils;
 namespace Object;
 
@@ -17,6 +14,14 @@ public class Entity{
         this.Skin = new(dimension,new(0,0));
         this.Body = new(dimension,new(0,0));
         AbsolutePosition = position;
+    }
+    public void SetAbsolutePositionSkin(Point2 position)
+    {
+        this.Skin.Position = position;
+    }
+    public void SetAbsolutePositionBody(Point2 position)
+    {
+        this.Body.Position = position;
     }
     public void SetAbsolutePosition(Point2 p)=>AbsolutePosition = p;
 }
@@ -32,14 +37,19 @@ public abstract class Controller{
                                  Entity.Skin.IsVisible = value;
                                } 
                          }
-    public Invoker.Invoker Invoker;
+    public IInvoker Invoker;
     public string Name;
-    public void SetUp(Invoker.Invoker invoker){Invoker=invoker;}
-    public void SetStillObject(Entity stillObject)=> this.Entity = stillObject;
-    public void Move(Point2 v) =>Invoker.Add(new MoveCommand(this,v,(x)=>{x.Get<bool>("CanMove");}));
-    public void RotateOf90(){
-        Entity.Skin.RotateSkinOf90();
-        Entity.Body.RotateBodyOf90();
+    public void SetUp(IInvoker invoker){Invoker=invoker;}
+    public void SetStillObject(Entity stillObject)=> Entity = stillObject;
+    public void Move(Point2 v) =>Invoker.AddCommand(new MoveCommand(this,v,(x)=>{x.Get<bool>("CanMove");}));
+    public void RelativeRotate(int angle){
+        Entity.Skin.Rotate(angle);
+        Entity.Body.Rotate(angle);
+    }
+    public void AbsoluteRotate(int angle)
+    {
+        Entity.Skin.AbsoluteRotate(angle);
+        Entity.Body.AbsoluteRotate(angle);
     }
     public abstract void Loop();
 }

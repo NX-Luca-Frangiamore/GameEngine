@@ -6,13 +6,14 @@ class ConsoleInput : IInput
         Task.Run(() => {
             while (true)
             {
-                keyPressed = Console.ReadKey(true).KeyChar switch
+                keyPressed = Console.ReadKey(true).Key switch
                 {
-                    'a' => "left",
-                    'w' => "up",
-                    'd' => "right",
-                    's' => "down",
-                    _ => keyPressed
+                    ConsoleKey.A => "a",
+                    ConsoleKey.W => "w",
+                    ConsoleKey.D => "d",
+                    ConsoleKey.S => "s",
+                    ConsoleKey.Spacebar => "space",
+                    _ => ""
                 };
                 while (Console.KeyAvailable)Console.ReadKey(true);
                 

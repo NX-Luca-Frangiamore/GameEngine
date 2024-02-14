@@ -39,16 +39,24 @@ public class Matrix<T>{
         if (p.y < 0 && p.y >= this.Dimension.y) return false;
         return true;
     }
-    protected  Dictionary<Point2, T> GetMatrixWithRotationOf90() {
-        Dictionary<Point2, T> matrix = new();
+    public void Rotate(int angle)
+    {
+        if (angle % 90 != 0) return;
+        int turn = angle / 90;
+        for (int i = 0; i< turn; i++)
+            RotateBy90();
+    }
+    public  void RotateBy90() {
+        Dictionary<Point2, T> newElements = new();
         for (int y = 0; y < Dimension.y; y++)
             for (int x = 0; x < Dimension.x; x++){
                 if( this.GetElement(new(x, y)) is T v){
                     Point2 nuovaPosizione = new Point2(y, Dimension.x - x - 1);
-                    matrix[nuovaPosizione] = v;
+                    newElements[nuovaPosizione] = v;
                 }
             }
-        return matrix;
+        Dimension = new(Dimension.y, Dimension.x);
+        Elements = newElements;
 
     }
     public static bool IsAOverLapB(Point2 positionA,Point2 sizeA,Point2 positionB,Point2 sizeB){

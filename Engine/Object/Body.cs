@@ -1,13 +1,22 @@
 using Utils;
 
 namespace Object;
-public class Body{
+public class Body(Point2 dimension, Point2 position) : CollisionMatrix(dimension){
     public bool IsTangible { get; set; } = true;
-    public CollisionMatrix Data{get;private set;}
-    public Point2 Position{get;private set;}
-    public Body(Point2 dimension,Point2 position){
-        Position=position;
-        Data = new CollisionMatrix(dimension);
+    public Point2 Position { get; set; } = position;
+    public int Angle {  get; private set; }
+    public override void AbsoluteRotate(int angle)
+    {
+        int diffAngle = angle - Angle;
+        if (diffAngle > 0)
+        {
+            Angle = diffAngle;
+            Rotate(diffAngle);
+        }
+        else if (diffAngle < 0)
+        {
+            Angle = diffAngle + 360;
+            Rotate(diffAngle + 360);
+        }
     }
-    public void RotateBodyOf90()=>Data=Data.GetCollisionMatrixRotatedOf90();
 }

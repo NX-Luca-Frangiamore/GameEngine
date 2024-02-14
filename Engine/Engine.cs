@@ -1,10 +1,8 @@
-using System.Reflection;
 using Graphics;
 using Graphics.GraphicsEngine;
 using InputEngine;
-using Object;
 using PhysicsEngine;
-
+using GameEngine.Engine.InvokerEngine;
 namespace Engine;
 public abstract partial class IEngine{
     private int _delayFrame = 500;
@@ -15,8 +13,8 @@ public abstract partial class IEngine{
     public IInput InputEngine;
     public ObjectResource ResourceEngine;
     public IGraphicsEngine GraphicsEngine;
-    public Invoker.Invoker Invoker;
-    public IEngine(IPhisicsEngine phisicsEngine,IGraphicsEngine graphicsEngine,IInput inputEngine,ObjectResource resourceEngine,Invoker.Invoker invoker){
+    public IInvoker Invoker;
+    public IEngine(IPhisicsEngine phisicsEngine,IGraphicsEngine graphicsEngine,IInput inputEngine,ObjectResource resourceEngine,IInvoker invoker){
         this.PhisicsEngine = phisicsEngine;
         this.GraphicsEngine = graphicsEngine;
         this.InputEngine = inputEngine;

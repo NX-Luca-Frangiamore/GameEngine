@@ -19,12 +19,12 @@ public class ColorGraphicsEngine : IGraphicsEngine
         PixelsMatrix newMatrix= new(Display.Dimension,1);
         foreach (var o in sprites) { 
             if (!o.Sprite.IsVisible) continue;
-            for (int y = 0; y < o.Sprite.Data.Dimension.y; y++)
-                for (int x = 0; x < o.Sprite.Data.Dimension.x; x++)
+            for (int y = 0; y < o.Sprite.Dimension.y; y++)
+                for (int x = 0; x < o.Sprite.Dimension.x; x++)
                 {
                     Point2 pixelPosition = new(x, y);
                     newMatrix.SetPixel(o.AbsolutePosition.Plus(pixelPosition.Plus(o.Sprite.Position)),
-                         o.Sprite.Data.GetPixel(pixelPosition));
+                         o.Sprite.GetPixel(pixelPosition));
                 }
         }
         this.PrintFrame(newMatrix);
