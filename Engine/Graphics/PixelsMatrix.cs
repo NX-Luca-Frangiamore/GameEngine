@@ -9,6 +9,7 @@ public class PixelsMatrix: Matrix<Pixel>
     {
         this.NCharactersPixel = nCharactersPixel;
     }
+    public PixelsMatrix(Point2 dimension, Dictionary<Point2, Pixel> elemets) : base(dimension,new(" "), elemets) { }
     public bool FillWith(string data){
         if (data.Length > this.NCharactersPixel) return false;
         for (int y = 0; y < this.Dimension.y; y++)
