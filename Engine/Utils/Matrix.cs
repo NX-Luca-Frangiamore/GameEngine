@@ -1,11 +1,16 @@
-using Utils;
-
+namespace Utils;
 public class Matrix<T>{
-    protected Dictionary<Point2, T> Elements{ get;set; }
+    public Dictionary<Point2, T> Elements{ get;protected set; }
     public Point2 Dimension { get; private set; }
-    private T Default_value;
+    private readonly T Default_value;
     protected Matrix(Point2 dimension,T default_value){
-        Elements = new();
+        Elements = [];
+        Dimension = dimension;
+        Default_value = default_value;
+    }
+    protected Matrix(Point2 dimension, T default_value, Dictionary<Point2, T> elements)
+    {
+        Elements = elements;
         Dimension = dimension;
         Default_value = default_value;
     }
@@ -20,7 +25,25 @@ public class Matrix<T>{
         Elements[p] = value;
         return true;
     }
-
+    protected bool SetElements(Dictionary<Point2, T> dic)
+    {
+       foreach(var (id,v) in dic)
+          if(!SetElement(id,v))
+                return false;
+       return true;
+    }
+    public void ExecuteForAllElement(Action<T> act)
+    {
+        for (int y = 0; y < Dimension.y; y++)
+            for (int x = 0; x < Dimension.x; x++)
+                act(this.Elements[new(y, x)]);
+    }
+    public void AddInAllElement(T date)
+    {
+        for (int y = 0; y < Dimension.y; y++)
+            for (int x = 0; x < Dimension.x; x++)
+                SetElement(new(y, x), date);
+    }
     protected bool DeleteElement(Point2 p) => Elements.Remove(p);
 
     private bool CanElementBeInMatrix(Point2 p){
@@ -28,16 +51,24 @@ public class Matrix<T>{
         if (p.y < 0 && p.y >= this.Dimension.y) return false;
         return true;
     }
-    protected  Dictionary<Point2, T> GetMatrixWithRotationOf90() {
-        Dictionary<Point2, T> matrix = new();
+    public void RelativeRotate(int angle)
+    {
+        if (angle % 90 != 0) return;
+        int turn = angle / 90;
+        for (int i = 0; i< turn; i++)
+            RotateBy90();
+    }
+    private  void RotateBy90() {
+        Dictionary<Point2, T> newElements = new();
         for (int y = 0; y < Dimension.y; y++)
             for (int x = 0; x < Dimension.x; x++){
                 if( this.GetElement(new(x, y)) is T v){
                     Point2 nuovaPosizione = new Point2(y, Dimension.x - x - 1);
-                    matrix[nuovaPosizione] = v;
+                    newElements[nuovaPosizione] = v;
                 }
             }
-        return matrix;
+        Dimension = new(Dimension.y, Dimension.x);
+        Elements = newElements;
 
     }
     public static bool IsAOverLapB(Point2 positionA,Point2 sizeA,Point2 positionB,Point2 sizeB){

@@ -23,7 +23,8 @@ class ConsoleMulticolorDisplay : IDisplay
     }
     private ConsoleColor GetColorFrom(Pixel pixel) => Enum.TryParse(pixel.Info?.Color??" ", true, out ConsoleColor c) ? c : DEFAULT_COLOR;
 
-    public override void ShowEmptyFrame() { Buffer.Clear(); Console.Clear(); }
+    public override void ShowEmptyFrame() { Buffer.Clear(); Console.Clear();
+     }
 
     public override void FinishPrintFrame()
     {

@@ -1,14 +1,35 @@
 using Graphics;
 using Utils;
 
-public class Sprite{
-    public Point2 Position{ get; set; }
-    public PixelsMatrix Data{ get; set; }
+public class Sprite
+{
     public bool IsVisible=true;
-    public Sprite(Point2 dimension,Point2 position){
+    
+    public Point2 Position;
+    public int Angle {  get; private set; }
+    public PixelsMatrix Data { get; private set; }
+    public Sprite(Point2 dimension, Point2 position)
+    {
+        Data=new PixelsMatrix(dimension,1);
         this.Position = position;
-        this.Data = new(dimension, 1);
-        Data.FillWith("*");
     }
-    public void RotateSkinOf90() => Data = Data.GetPixelMatrixRotatedOf90();
+    public void AbsoluteRotate(int angle)
+    {
+        int diffAngle = angle-Angle;
+        if (diffAngle > 0) {
+            Angle = diffAngle;
+            Data.RelativeRotate(diffAngle);
+        }
+        else if(diffAngle < 0) {
+            Angle = diffAngle+360;
+            Data.RelativeRotate(diffAngle + 360);
+        }
+    }
+    public Sprite Clone()
+    {
+        var cloned = new Sprite(Data.Dimension, Position);
+        cloned.Data = Data.Clone();
+        return cloned;
+    }
+
 }

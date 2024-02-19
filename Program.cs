@@ -7,7 +7,10 @@ using PhysicsEngine;
 using Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
+using GameEngine.Engine.InvokerEngine;
+using GameEngine.Engine.InvokerEngine.Commands;
+
+
 
 void StartEngine(Type typeLinkAssembly)
 {
@@ -19,12 +22,13 @@ void StartEngine(Type typeLinkAssembly)
     builder.Services.AddSingleton<IInput, ConsoleInput>();
     builder.Services.AddSingleton<IEngine, Game>();
     var host = builder.Build();
-        var engine= host.Services.GetRequiredService<IEngine>();
+       var engine= host.Services.GetRequiredService<IEngine>();
         engine.ResourceEngine.CollectObjects(typeLinkAssembly);
         engine.Start();
     host.Run();
 }
 StartEngine(typeof(Nave));
+
 public class Game :IEngine
 {
     public Game(IPhisicsEngine phisicsEngine, IGraphicsEngine graphicsEngine,
@@ -32,46 +36,59 @@ public class Game :IEngine
                 : base(phisicsEngine, graphicsEngine, inputEngine, resourceEngine)
     {
         this.InputEngine.Delay = 100;
-        DelayFrame = 300;   
-    }
+        DelayFrame = 150;
+       
+    }   
 }
-class Nave : IObject
+class Nave : Controller
 {
     private Point2 Speed = new(0, 0);
-
     public Nave()
     {
-        DumbObject stillObject = new(new(2, 1), new(6, 1));
-        stillObject.Skin.Data.FillWith("o");
-        stillObject.Skin.Data.SetPixel(new(0, 0), new("A", new() { Color = "red" }));
+        Entity stillObject = Entity.New(3, new(1, 1));
+
+        stillObject.Body.Data.SetTangible(new(1, 0));
+        stillObject.Body.Data.SetTangible(new(1, 1));
+        stillObject.Body.Data.SetTangible(new(1, 2));
+
+        stillObject.Skin.Data.SetPixel(new(1, 0), new("o", new() { Color = "green" }));
+        stillObject.Skin.Data.SetPixel(new(1, 1), new("o", new() { Color = "green" }));
+        stillObject.Skin.Data.SetPixel(new(1, 2), new("o", new() { Color = "red" }));
         SetStillObject(stillObject);
+    
     }
     public override void Loop()
     {
-        Speed = MappingInputToVector2(this.Engine.InputEngine.keyPressed);
-        if(!IsInCollision)
-            this.Move(Speed);
-    }
-    public override void OnCollisionBy(string nameObject)
-    {
-        Move(new(-Speed.x, -Speed.y));
-        this.Engine.InputEngine.Reset();
+       // if(!IsInCollision)
+        //    Move(Speed);
+        Invoker.Execute(new GetKeyboard(this,(x)=>{
+            Speed = MappingInputToVector2(x.Get<string>("Key")) ?? new(0, 0);
+            if (x.Get<string>("Key") == "space")
+                Invoker.Execute(new RelativeRotateCommand(this,90));
+            if (x.Get<string>("Key") == "r")
+                Invoker.Undo();
+        }));
+
+    Move(Speed);
 
     }
-    private Point2 MappingInputToVector2(string? key) => key switch
+    private Point2? MappingInputToVector2(string? key) => key switch
     {
-        "left" => new Point2(-1, 0),
-        "right" => new Point2(1, 0),
-        "up" => new Point2(0, 1),
-        "down" => new Point2(0, -1),
-        _ => new(0,0),
+        "a" => new Point2(-1, 0),
+        "d" => new Point2(1, 0),
+        "w" => new Point2(0, 1),
+        "s" => new Point2(0, -1),
+        _ => null,
     };
 }
-public class Wall : IObject
+
+public class Wall : Controller
 {
     public Wall()
     {
-        var StillObject = new DumbObject(new(5,5), new(8,1));
+        var StillObject =Entity.New(5, new(8, 1));
+        StillObject.Skin.Data.FillWith("*");
+        StillObject.Body.Data.SetAllTangible();
         SetStillObject(StillObject);
     }
     public override void Loop()

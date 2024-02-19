@@ -1,10 +1,8 @@
-using System.Reflection;
 using Graphics;
 using Graphics.GraphicsEngine;
 using InputEngine;
-using Object;
 using PhysicsEngine;
-
+using GameEngine.Engine.InvokerEngine;
 namespace Engine;
 public abstract partial class IEngine{
     private int _delayFrame = 500;
@@ -23,7 +21,7 @@ public abstract partial class IEngine{
     }
     public void Start(){
         this.InputEngine.StartUpdateInput();
-        this.ResourceEngine.PhGetAllObjects().ForEach(x => x.Setup(this));
+        this.ResourceEngine.PhGetAllObjects().ForEach(x => x.SetUp(new Invoker(this)));
         BeforeStartLoop();
         StatusLoop = true;
         Loop();
@@ -37,8 +35,8 @@ public abstract partial class IEngine{
     private void Loop(){
         while(StatusLoop){
             BeforeRefresh();
-             ResourceEngine.PhGetAllObjects().ForEach(x=>x.Loop());
-            this.GraphicsEngine.ShowFrame(ResourceEngine.GetAllObjects().Select(x=>new DtoGraphicsEngine(x.Skin,x.AbsolutePosition)).ToList());
+            ResourceEngine.PhGetAllObjects().ForEach(x=>x.Loop());
+            GraphicsEngine.ShowFrame(ResourceEngine.GetAllObjects().Select(x=>new DtoGraphicsEngine(x.Skin,x.AbsolutePosition)).ToList());
             AfterRefresh();
             Thread.Sleep(DelayFrame);
         }

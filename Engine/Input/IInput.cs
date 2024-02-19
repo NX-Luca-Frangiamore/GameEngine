@@ -1,6 +1,14 @@
 namespace InputEngine;
 public abstract class IInput{
-    public string? keyPressed=null;
+    private string? _keyPressed = null;
+
+    public string? keyPressed
+    {
+        get { var t=_keyPressed;_keyPressed = null; return t; }
+        set { _keyPressed = value; }
+
+    }
+
     public abstract void StartUpdateInput(); 
     public void Reset()=>keyPressed=null;
 
