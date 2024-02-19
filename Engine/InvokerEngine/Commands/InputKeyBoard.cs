@@ -10,10 +10,9 @@ public class GetKeyboard : ICommand
 
     public override IResult OnExecution(IEngine engine) => new KeyboardResult(engine.InputEngine.keyPressed);
 
-    public override IResult OnUndo(IEngine engine)=> new KeyboardResult();
+    public override void OnUndo(IEngine engine)=> new DefaultResult();
 }
 public class KeyboardResult:IResult{
     public KeyboardResult(string? key)=>AddResults("Key",key);
-    public KeyboardResult() => AddResults("Key", default(string));
 
 }

@@ -1,11 +1,10 @@
-using Utils;
-
+namespace Utils;
 public class Matrix<T>{
     public Dictionary<Point2, T> Elements{ get;protected set; }
     public Point2 Dimension { get; private set; }
-    private T Default_value;
+    private readonly T Default_value;
     protected Matrix(Point2 dimension,T default_value){
-        Elements = new();
+        Elements = [];
         Dimension = dimension;
         Default_value = default_value;
     }
@@ -26,6 +25,13 @@ public class Matrix<T>{
         Elements[p] = value;
         return true;
     }
+    protected bool SetElements(Dictionary<Point2, T> dic)
+    {
+       foreach(var (id,v) in dic)
+          if(!SetElement(id,v))
+                return false;
+       return true;
+    }
     public void ExecuteForAllElement(Action<T> act)
     {
         for (int y = 0; y < Dimension.y; y++)
@@ -45,14 +51,14 @@ public class Matrix<T>{
         if (p.y < 0 && p.y >= this.Dimension.y) return false;
         return true;
     }
-    public void Rotate(int angle)
+    public void RelativeRotate(int angle)
     {
         if (angle % 90 != 0) return;
         int turn = angle / 90;
         for (int i = 0; i< turn; i++)
             RotateBy90();
     }
-    public  void RotateBy90() {
+    private  void RotateBy90() {
         Dictionary<Point2, T> newElements = new();
         for (int y = 0; y < Dimension.y; y++)
             for (int x = 0; x < Dimension.x; x++){

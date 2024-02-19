@@ -15,6 +15,17 @@ public class Entity{
         this.Body = new(dimension,new(0,0));
         AbsolutePosition = position;
     }
+    public Entity(Sprite skin, Body body,Point2 position)
+    {
+        this.Skin = skin; this.Body = body;
+        AbsolutePosition = position;
+    }
+    public static Entity New(int dimension, Point2 position)
+        =>new Entity(new(dimension, dimension), position);
+
+    public Entity Clone()=>
+        new(Skin.Clone(), Body.Clone(), AbsolutePosition);
+
     public void SetAbsolutePositionSkin(Point2 position)
     {
         this.Skin.Position = position;
@@ -24,6 +35,16 @@ public class Entity{
         this.Body.Position = position;
     }
     public void SetAbsolutePosition(Point2 p)=>AbsolutePosition = p;
+    public void RelativeRotate(int angle)
+    {
+        Skin.Data.RelativeRotate(angle);
+        Body.Data.RelativeRotate(angle);
+    }
+    public void AbsoluteRotate(int angle)
+    {
+        Skin.AbsoluteRotate(angle);
+        Body.AbsoluteRotate(angle);
+    }
 }
 #pragma warning disable CS8618 
 public abstract class Controller{
@@ -41,15 +62,8 @@ public abstract class Controller{
     public string Name;
     public void SetUp(IInvoker invoker){Invoker=invoker;}
     public void SetStillObject(Entity stillObject)=> Entity = stillObject;
-    public void Move(Point2 v) =>Invoker.AddCommand(new MoveCommand(this,v,(x)=>{x.Get<bool>("CanMove");}));
-    public void RelativeRotate(int angle){
-        Entity.Skin.Rotate(angle);
-        Entity.Body.Rotate(angle);
-    }
-    public void AbsoluteRotate(int angle)
-    {
-        Entity.Skin.AbsoluteRotate(angle);
-        Entity.Body.AbsoluteRotate(angle);
-    }
+    public void Move(Point2 v) =>Invoker.Execute(new MoveCommand(this,v));
+    public void RelativeRotate(int angle)=>Entity.RelativeRotate(angle);
+    public void AbsoluteRotate(int angle)=>Entity.AbsoluteRotate(angle);
     public abstract void Loop();
 }

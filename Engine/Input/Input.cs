@@ -12,6 +12,7 @@ class ConsoleInput : IInput
                     ConsoleKey.W => "w",
                     ConsoleKey.D => "d",
                     ConsoleKey.S => "s",
+                    ConsoleKey.R => "r",
                     ConsoleKey.Spacebar => "space",
                     _ => ""
                 };

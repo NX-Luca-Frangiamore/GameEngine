@@ -2,26 +2,22 @@ using Engine;
 using GameEngine.Engine.InvokerEngine.Abstracts;
 
 namespace GameEngine.Engine.InvokerEngine;
-public class Invoker : IInvoker
+public class Invoker(IEngine engine): IInvoker
 {
-    private readonly List<ICommand>BufferCommands=[];
     private readonly Stack<ICommand>HistoryCommands=[];
 
-    public void AddCommand(ICommand command) => BufferCommands.Add(command);
-
-    public void Execute(IEngine engine)
+    public void Execute(ICommand command)
     {
-        foreach (var c in BufferCommands){
-            c.Execute(engine);
-            HistoryCommands.Push(c);
-        }
-        BufferCommands.Clear();
+        command.Execute(engine);
+        HistoryCommands.Push(command);
     }
 
-    public void Undo(IEngine engine)
+    public void Undo()
     {
-         foreach (var c in HistoryCommands){
+        foreach (var c in HistoryCommands){
             c.Undo(engine);
         }
+        HistoryCommands.Clear();
+
     }
 }

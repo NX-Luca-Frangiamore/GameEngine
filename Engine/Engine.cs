@@ -13,17 +13,15 @@ public abstract partial class IEngine{
     public IInput InputEngine;
     public ObjectResource ResourceEngine;
     public IGraphicsEngine GraphicsEngine;
-    public IInvoker Invoker;
-    public IEngine(IPhisicsEngine phisicsEngine,IGraphicsEngine graphicsEngine,IInput inputEngine,ObjectResource resourceEngine,IInvoker invoker){
+    public IEngine(IPhisicsEngine phisicsEngine,IGraphicsEngine graphicsEngine,IInput inputEngine,ObjectResource resourceEngine){
         this.PhisicsEngine = phisicsEngine;
         this.GraphicsEngine = graphicsEngine;
         this.InputEngine = inputEngine;
         this.ResourceEngine = resourceEngine;
-        this.Invoker=invoker;
     }
     public void Start(){
         this.InputEngine.StartUpdateInput();
-        this.ResourceEngine.PhGetAllObjects().ForEach(x => x.SetUp(Invoker));
+        this.ResourceEngine.PhGetAllObjects().ForEach(x => x.SetUp(new Invoker(this)));
         BeforeStartLoop();
         StatusLoop = true;
         Loop();
@@ -37,9 +35,8 @@ public abstract partial class IEngine{
     private void Loop(){
         while(StatusLoop){
             BeforeRefresh();
-            Invoker.Execute(this);
             ResourceEngine.PhGetAllObjects().ForEach(x=>x.Loop());
-            this.GraphicsEngine.ShowFrame(ResourceEngine.GetAllObjects().Select(x=>new DtoGraphicsEngine(x.Skin,x.AbsolutePosition)).ToList());
+            GraphicsEngine.ShowFrame(ResourceEngine.GetAllObjects().Select(x=>new DtoGraphicsEngine(x.Skin,x.AbsolutePosition)).ToList());
             AfterRefresh();
             Thread.Sleep(DelayFrame);
         }

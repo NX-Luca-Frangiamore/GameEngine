@@ -1,5 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
-
 namespace Utils;
 public record Point2(int x,int y){
     public static IEnumerable<Point2> GetPointsWithSameY(int y, int nVectors)

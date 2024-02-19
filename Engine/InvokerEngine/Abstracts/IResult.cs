@@ -1,12 +1,12 @@
 namespace GameEngine.Engine.InvokerEngine.Abstracts;
 
 public abstract class IResult { 
-    public Dictionary<string,object>Results=new();
+    public Dictionary<string,object>Results=[];
     public void AddResults<T>(string key,T data)=>Results[key]=data!;
     public T? Get<T>(string key){
-        if(!Results.ContainsKey(key))return default;
+        if(!Results.TryGetValue(key, out object? value)) return default;
         try{
-            return (T)Results[key];
+            return (T)value;
         }
         catch (Exception)
         {
@@ -17,4 +17,6 @@ public abstract class IResult {
         return Results.ToString()!;
     }
 
+}
+public class DefaultResult : IResult { 
 }

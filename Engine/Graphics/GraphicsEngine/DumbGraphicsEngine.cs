@@ -21,12 +21,12 @@ public class DumbGraphicsEngine : IGraphicsEngine
         PixelsMatrix newMatrix= new(Display.Dimension,NCharactersPixel);
         foreach (var o in dtoSprites) { 
             if (!o.Sprite.IsVisible) continue;
-            for (int y = 0; y < o.Sprite.Dimension.y; y++)
-                for (int x = 0; x < o.Sprite.Dimension.x; x++)
+            for (int y = 0; y < o.Sprite.Data.Dimension.y; y++)
+                for (int x = 0; x < o.Sprite.Data.Dimension.x; x++)
                 {
                     Point2 pixelPosition = new(x, y);
                     newMatrix.SetPixel(o.AbsolutePosition.Plus(pixelPosition.Plus(o.Sprite.Position)),
-                         o.Sprite.GetPixel(pixelPosition));
+                         o.Sprite.Data.GetPixel(pixelPosition));
                 }
         }
 
