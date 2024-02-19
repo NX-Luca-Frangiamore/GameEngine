@@ -4,7 +4,7 @@ using Utils;
 
 class ConsoleMulticolorDisplay : IDisplay
 {
-    StringBuilder Buffer=new();
+    StringBuilder Buffer = new();
     ConsoleColor? lastColor=null;
     const ConsoleColor DEFAULT_COLOR = ConsoleColor.White;
 

@@ -20,8 +20,10 @@ public class Matrix<T>{
         return Elements.TryGetValue(p, out T? value) ? value : Default_value;
     }
 
-    protected bool SetElement(Point2 p,T value){
+    protected bool SetElement(Point2 p,T? value){
         if (!CanElementBeInMatrix(p)) return false;
+        if (value is null)
+            Elements[p] = Default_value;
         Elements[p] = value;
         return true;
     }

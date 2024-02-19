@@ -1,5 +1,5 @@
 using Engine;
-using Object;
+using GameEngine.Object;
 
 
 namespace GameEngine.Engine.InvokerEngine.Abstracts;

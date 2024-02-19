@@ -1,6 +1,6 @@
 using Graphics;
 using Utils;
-
+namespace GameEngine.Object;
 public class Sprite
 {
     public bool IsVisible=true;

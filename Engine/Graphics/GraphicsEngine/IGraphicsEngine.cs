@@ -1,5 +1,5 @@
 using Graphics.Display;
-using Object;
+using GameEngine.Object;
 
 namespace Graphics.GraphicsEngine;
 public abstract class IGraphicsEngine{

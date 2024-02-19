@@ -1,6 +1,6 @@
 ﻿using Engine;
 using GameEngine.Engine.InvokerEngine.Abstracts;
-using Object;
+using GameEngine.Object;
 
 namespace GameEngine.Engine.InvokerEngine.Commands;
 public class RelativeRotateCommand(Controller o, int angle, CallBack? callBack = default) : ICommand(o,callBack)

@@ -1,6 +1,6 @@
 
 using Graphics.Display;
-using Object;
+using GameEngine.Object;
 using Utils;
 
 namespace Graphics.GraphicsEngine;

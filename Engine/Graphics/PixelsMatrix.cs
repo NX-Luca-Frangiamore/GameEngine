@@ -21,7 +21,17 @@ public class PixelsMatrix: Matrix<Pixel>
         return true;
     }
     public Pixel GetPixel(Point2 p) => GetElement(p) ?? new Pixel(" ");
-    public bool SetPixel(Point2 p, Pixel v) => SetElement(p, v);
+    public bool SetPixel(Point2 p, Pixel v)
+    {
+        if (v.Value.Length == 0) { 
+           SetElement(p, null);
+            return true;
+        }
+        if (v.Value.Length > NCharactersPixel)
+            return false;
+        SetElement(p, v);
+        return true;
+    }
     public PixelsMatrix Clone()
     {
         var t = new PixelsMatrix(Dimension);

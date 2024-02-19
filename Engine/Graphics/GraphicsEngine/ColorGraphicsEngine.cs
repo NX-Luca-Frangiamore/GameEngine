@@ -1,6 +1,6 @@
 
 using Graphics.Display;
-using Object;
+using GameEngine.Object;
 using Utils;
 
 namespace Graphics.GraphicsEngine;
@@ -23,8 +23,9 @@ public class ColorGraphicsEngine : IGraphicsEngine
                 for (int x = 0; x < o.Sprite.Data.Dimension.x; x++)
                 {
                     Point2 pixelPosition = new(x, y);
+                    var pixel = o.Sprite.Data.GetPixel(pixelPosition);
                     newMatrix.SetPixel(o.AbsolutePosition.Plus(pixelPosition.Plus(o.Sprite.Position)),
-                         o.Sprite.Data.GetPixel(pixelPosition));
+                        pixel);
                 }
         }
         this.PrintFrame(newMatrix);

@@ -1,6 +1,6 @@
 using System.Resources;
 using Engine;
-using Object;
+using GameEngine.Object.Entity;
 using Utils;
 
 namespace PhysicsEngine;

@@ -36,7 +36,8 @@ public abstract partial class IEngine{
         while(StatusLoop){
             BeforeRefresh();
             ResourceEngine.PhGetAllObjects().ForEach(x=>x.Loop());
-            GraphicsEngine.ShowFrame(ResourceEngine.GetAllObjects().Select(x=>new DtoGraphicsEngine(x.Skin,x.AbsolutePosition)).ToList());
+            var dtos = ResourceEngine.GetAllObjects().Select(x => new DtoGraphicsEngine(x.Sprite, x.AbsolutePosition)).ToList();
+            GraphicsEngine.ShowFrame(dtos);
             AfterRefresh();
             Thread.Sleep(DelayFrame);
         }

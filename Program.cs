@@ -2,13 +2,14 @@ using Engine;
 using Graphics.Display;
 using Graphics.GraphicsEngine;
 using InputEngine;
-using Object;
 using PhysicsEngine;
 using Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using GameEngine.Engine.InvokerEngine;
 using GameEngine.Engine.InvokerEngine.Commands;
+using GameEngine.Object;
+using GameEngine.Object.Entity;
+using System.Xml.Linq;
 
 
 
@@ -47,14 +48,22 @@ class Nave : Controller
     {
         Entity stillObject = Entity.New(3, new(1, 1));
 
-        stillObject.Body.Data.SetTangible(new(1, 0));
-        stillObject.Body.Data.SetTangible(new(1, 1));
-        stillObject.Body.Data.SetTangible(new(1, 2));
 
-        stillObject.Skin.Data.SetPixel(new(1, 0), new("o", new() { Color = "green" }));
-        stillObject.Skin.Data.SetPixel(new(1, 1), new("o", new() { Color = "green" }));
-        stillObject.Skin.Data.SetPixel(new(1, 2), new("o", new() { Color = "red" }));
-        SetStillObject(stillObject);
+        DtoCreateEntity dto = new DtoCreateEntity(3);
+        dto.Rows.Add(new(3) { Els = ["", "o", ""] });
+        dto.Rows.Add(new(3) { Els = ["", "o", ""] });
+        dto.Rows.Add(new(3) { Els = ["", "o", ""] });
+        dto.SetInfo(new(1, 2), new InfoPixel() { Color = "red" });
+       // stillObject.Body.Data.SetTangible(new(1, 0));
+       // stillObject.Body.Data.SetTangible(new(1, 1));
+       // stillObject.Body.Data.SetTangible(new(1, 2));
+       //
+       // stillObject.Sprite.Data.SetPixel(new(1, 0), new("o", new() { Color = "green" }));
+       // stillObject.Sprite.Data.SetPixel(new(1, 1), new("o", new() { Color = "green" }));
+       // stillObject.Sprite.Data.SetPixel(new(1, 2), new("o", new() { Color = "red" }));
+
+        SetStillObject(EntityFactory.CreateEntity(new(1, 1), dto)
+);
     
     }
     public override void Loop()
@@ -72,7 +81,7 @@ class Nave : Controller
     Move(Speed);
 
     }
-    private Point2? MappingInputToVector2(string? key) => key switch
+    private static Point2? MappingInputToVector2(string? key) => key switch
     {
         "a" => new Point2(-1, 0),
         "d" => new Point2(1, 0),
@@ -87,7 +96,7 @@ public class Wall : Controller
     public Wall()
     {
         var StillObject =Entity.New(5, new(8, 1));
-        StillObject.Skin.Data.FillWith("*");
+        StillObject.Sprite.Data.FillWith("*");
         StillObject.Body.Data.SetAllTangible();
         SetStillObject(StillObject);
     }

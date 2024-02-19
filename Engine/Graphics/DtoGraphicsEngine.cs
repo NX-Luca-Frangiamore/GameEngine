@@ -1,3 +1,4 @@
+using GameEngine.Object;
 using Utils;
 namespace Graphics;
 public class DtoGraphicsEngine{

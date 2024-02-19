@@ -1,6 +1,6 @@
 using Utils;
 
-namespace Object;
+namespace GameEngine.Object;
 public class Body{
     public bool IsTangible { get; set; } = true;
     public Point2 Position { get; set; }
