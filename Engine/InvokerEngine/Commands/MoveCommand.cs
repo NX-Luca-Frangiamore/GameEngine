@@ -13,9 +13,12 @@ public class MoveCommand : ICommand
     }
     public override MoveResult OnExecution(IEngine engine)
     {
-        if(engine.PhisicsEngine.AreThereCollisions(O.Entity,Move))return new MoveResult(false);
-
-        O.Entity.SetAbsolutePosition(O.Entity.AbsolutePosition.Plus(Move));
+        var (versore,module)= Move.GetVersore();
+        for (var i = 0; i < module; i++)
+        {
+           if(engine.PhisicsEngine.AreThereCollisions(O.Entity, versore)) return new MoveResult(false); ;
+           O.Entity.SetAbsolutePosition(O.Entity.AbsolutePosition.Plus(versore));
+        }
         return new MoveResult(true);
     }
 
@@ -26,5 +29,5 @@ public class MoveCommand : ICommand
 }
 public class MoveResult:IResult{
     public MoveResult(bool canMove)=>AddResults("canMove",canMove);
-    public bool? CanMove { get { return Get<bool>("canMove"); } }
+    public bool CanMove { get { return Get<bool>("canMove"); } }
 }

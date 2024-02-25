@@ -13,6 +13,7 @@ public class Body{
         Data=new CollisionMatrix(dimension);
     }
     public void CollideBut(string name)=>Expect.Add(name);
+    public void CollideWith(string name) => Expect.Remove(name);
     public Body Clone()
     {
         var cloned = new Body(Data.Dimension, Position);

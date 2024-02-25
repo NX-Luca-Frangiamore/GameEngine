@@ -37,13 +37,14 @@ public class Game :IEngine
                 : base(phisicsEngine, graphicsEngine, inputEngine, resourceEngine)
     {
         this.InputEngine.Delay = 100;
-        DelayFrame = 150;
+        DelayFrame = 100;
        
     }   
 }
 public class Nave : Controller
 {
     private Point2 Speed = new(0, 0);
+    private int nBullet = 0;
     public Nave()
     {
         Entity stillObject = Entity.New(3, new(1, 1));
@@ -62,18 +63,14 @@ public class Nave : Controller
     {
         Invoker.Execute(new GetKeyboard(this,(x)=>{
             Speed = MappingInputToVector2(x.Get<string>("Key")) ?? new(0, 0);
-            if (x.Get<string>("Key") == "space")
-                Invoker.Execute(new RelativeRotateCommand(this,90));
             if (x.Get<string>("Key") == "r")
                 Invoker.Undo();
             MappingInputToRotation(x.Get<string>("Key"), this);
-            if (x.Get<string>("Key") == "q")
+            if (x.Get<string>("Key") == "space")
             {
-                Invoker.Execute(new CreateControllerCommand(this,"bullet",new Bullet(this.Entity.AbsolutePosition.Plus(new(1,1)), MappingAngleToVector2())));
+                Invoker.Execute(new CreateControllerCommand(this,"bullet"+ nBullet, new Bullet(this.Entity.AbsolutePosition.Plus(new(1,1)), MappingAngleToVector2(),Entity.Name)));
+                nBullet++;
             }
-            Entity.Body.CollideBut("bullet");
-
-                
         }));
 
         Invoker.Execute(new MoveCommand(this, Speed));
@@ -91,10 +88,10 @@ public class Nave : Controller
     {
         switch (key)
         {
-            case "a": c.Entity.AbsoluteRotate(270); break;
-            case "d": c.Entity.AbsoluteRotate(90); break;
-            case "w": c.Entity.AbsoluteRotate(0); break;
-            case "s": c.Entity.AbsoluteRotate(180); break;
+            case "a": c.Invoker.Execute(new AbsoluteRotateCommand(c,270)); break;
+            case "d": c.Invoker.Execute(new AbsoluteRotateCommand(c, 90)); break;
+            case "w": c.Invoker.Execute(new AbsoluteRotateCommand(c, 0)); break;
+            case "s": c.Invoker.Execute(new AbsoluteRotateCommand(c, 180)); break;
         }
     }
     private Point2? MappingAngleToVector2() => Entity.Sprite.Angle switch
@@ -109,17 +106,28 @@ public class Nave : Controller
 internal class Bullet : Controller
 {
     private Point2 Speed;
-    public Bullet(Point2 position,Point2 speed)
+    private Point2 Init;
+    private string Own;
+    public Bullet(Point2 position,Point2 speed,string own)
     {
+        Own=own;
+        Init =position;
         var StillObject = Entity.New(1, position);
-        StillObject.Sprite.Data.FillWith("-");
+        StillObject.Sprite.Data.FillWith(new Pixel("o",new InfoPixel { Color="green"}));
         StillObject.Body.Data.SetAllTangible();
         SetStillObject(StillObject);
         Speed = new Point2(-speed.x*2,-speed.y*2);
+        Entity.Body.CollideBut(Own);
     }
     public override void Loop()
     {
-        Invoker.Execute(new MoveCommand(this,Speed));
+        Invoker.Execute(new MoveCommand(this, Speed, (x =>
+        {
+            if (!((MoveResult)x).CanMove)
+                Entity.Body.CollideWith(Own);
+        })));
+        if (Init.Minus(Entity.AbsolutePosition).GetModule() > 10)
+            Invoker.Execute(new DestroyMeCommand(this));
     }
 }
 public class Wall : Controller

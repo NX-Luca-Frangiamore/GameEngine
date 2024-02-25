@@ -8,17 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GameEngine.Engine.InvokerEngine.Commands;
-public class CreateControllerCommand(Controller o,string name, Controller newC, CallBack? callBack = null) : ICommand(o, callBack)
+public class DestroyMeCommand : ICommand
 {
+    public DestroyMeCommand(Controller o, CallBack? callBack = null) : base(o, callBack)
+    {
+    }
+
     public override IResult OnExecution(IEngine engine)
     {
-        newC.Entity.Name = name;
-        newC.SetUp(O.Invoker);
-        engine.ResourceEngine.AddNewObject(name, newC);
+        engine.ResourceEngine.DestroyObject(O.Entity.Name);
         return new DefaultResult();
     }
     public override void OnUndo(IEngine engine)
     {
-        engine.ResourceEngine.DestroyObject(name);
+        engine.ResourceEngine.AddNewObject(O.Entity.Name,O);
     }
 }
