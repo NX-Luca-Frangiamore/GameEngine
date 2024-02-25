@@ -1,5 +1,6 @@
 using Engine;
 using GameEngine.Object.Entity;
+using System.Linq;
 using Utils;
 
 namespace PhysicsEngine;
@@ -16,8 +17,10 @@ public class BasePhysicsEngine(ObjectResource ObjectsReferents) : IPhisicsEngine
           
             var absolutePositionPart=absolutePositionBody.Plus(part.Key);
             
-            foreach(var otherObject in ObjectsReferents.GetAllObjects()){
+            foreach(var otherObject in ObjectsReferents.GetAllController().Select(x=>x.Entity)){
                 if(otherObject== entity) continue;
+                if (entity.Body.Expect.Contains(otherObject.Name)) continue;
+                if (otherObject.Body.Expect.Contains(entity.Name)) continue;
                 if (!otherObject.Body.IsTangible)continue;
                 if (otherObject.Body.Data.Elements.Any(x=>x.Value && x.Key.Plus(otherObject.AbsolutePosition.Plus(otherObject.Body.Position))==absolutePositionPart))
                     return true;

@@ -8,7 +8,7 @@ public delegate void CallBack(IResult result);
 public abstract class ICommand(Controller o, CallBack? callBack = default)
 {
     public Controller O { get; private set; } = o;
-    public string FromWho { get; init; } = o.Name;
+    public string FromWho { get; init; } = o.Entity.Name;
     private readonly CallBack CallBack = callBack ?? ((x) => { });
 
     public void Execute(IEngine engine){
@@ -18,5 +18,5 @@ public abstract class ICommand(Controller o, CallBack? callBack = default)
         OnUndo(engine);
     }
     public abstract IResult OnExecution(IEngine engine);
-    public abstract void OnUndo(IEngine engine);
+    public virtual void OnUndo(IEngine engine) { }
 }

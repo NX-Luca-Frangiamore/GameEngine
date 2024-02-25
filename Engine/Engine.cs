@@ -21,7 +21,7 @@ public abstract partial class IEngine{
     }
     public void Start(){
         this.InputEngine.StartUpdateInput();
-        this.ResourceEngine.PhGetAllObjects().ForEach(x => x.SetUp(new Invoker(this)));
+        this.ResourceEngine.GetAllController().ForEach(x => x.SetUp(new Invoker(this)));
         BeforeStartLoop();
         StatusLoop = true;
         Loop();
@@ -35,8 +35,8 @@ public abstract partial class IEngine{
     private void Loop(){
         while(StatusLoop){
             BeforeRefresh();
-            ResourceEngine.PhGetAllObjects().ForEach(x=>x.Loop());
-            var dtos = ResourceEngine.GetAllObjects().Select(x => new DtoGraphicsEngine(x.Sprite, x.AbsolutePosition)).ToList();
+            ResourceEngine.GetAllController().ForEach(x=>x.Loop());
+            var dtos = ResourceEngine.GetAllController().Select(x => new DtoGraphicsEngine(x.Entity.Sprite, x.Entity.AbsolutePosition)).ToList();
             GraphicsEngine.ShowFrame(dtos);
             AfterRefresh();
             Thread.Sleep(DelayFrame);

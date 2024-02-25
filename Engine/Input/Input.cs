@@ -14,6 +14,7 @@ class ConsoleInput : IInput
                     ConsoleKey.S => "s",
                     ConsoleKey.R => "r",
                     ConsoleKey.Spacebar => "space",
+                    ConsoleKey.Q => "q",
                     _ => ""
                 };
                 while (Console.KeyAvailable)Console.ReadKey(true);

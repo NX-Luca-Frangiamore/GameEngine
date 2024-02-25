@@ -8,7 +8,7 @@ namespace GameEngine.Object;
 public abstract class Controller{
 
     private bool _isActive=true;
-    public Entity.Entity Entity{ get; set; }
+    public Entity.Entity Entity{ get; protected set; }
     public bool IsActive { 
                            get{ return _isActive; }
                            set { _isActive = value;
@@ -17,11 +17,7 @@ public abstract class Controller{
                                } 
                          }
     public IInvoker Invoker;
-    public string Name;
     public void SetUp(IInvoker invoker){Invoker=invoker;}
     public void SetStillObject(Entity.Entity stillObject)=> Entity = stillObject;
-    public void Move(Point2 v) =>Invoker.Execute(new MoveCommand(this,v));
-    public void RelativeRotate(int angle)=>Entity.RelativeRotate(angle);
-    public void AbsoluteRotate(int angle)=>Entity.AbsoluteRotate(angle);
-    public abstract void Loop();
+    public virtual void Loop() { }
 }

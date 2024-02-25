@@ -6,7 +6,7 @@ public class Entity
     public Sprite Sprite { get; private set; }
     public Body Body { get; private set; }
     public Point2 AbsolutePosition { get; private set; }
-
+    public string Name;
     public bool IsInCollision;
     public Entity(Point2 dimension, Point2 position)
     {
@@ -34,10 +34,11 @@ public class Entity
         Body.Position = position;
     }
     public void SetAbsolutePosition(Point2 p) => AbsolutePosition = p;
+
     public void RelativeRotate(int angle)
     {
-        Sprite.Data.RelativeRotate(angle);
-        Body.Data.RelativeRotate(angle);
+        Sprite.RelativeRotate(angle);
+        Body.RelativeRotate(angle);
     }
     public void AbsoluteRotate(int angle)
     {

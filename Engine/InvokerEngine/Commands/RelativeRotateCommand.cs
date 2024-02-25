@@ -8,14 +8,14 @@ public class RelativeRotateCommand(Controller o, int angle, CallBack? callBack =
     private readonly int Angle = angle;
 
     public override RotateResult OnExecution(IEngine engine) {
-        O.RelativeRotate(Angle);
+        O.Entity.RelativeRotate(Angle);
         var r = engine.PhisicsEngine.AreThereCollisions(O.Entity, new(0, 0));
-        if (r)O.RelativeRotate(360-Angle);
+        if (r)O.Entity.RelativeRotate(360-Angle);
         return new RotateResult(!r);
     }
     public override void OnUndo(IEngine engine)
     {
-        O.RelativeRotate(360-Angle);
+        O.Entity.RelativeRotate(360-Angle);
     }
 }
 public class RotateResult : IResult
