@@ -10,6 +10,7 @@ using GameEngine.Engine.InvokerEngine.Commands;
 using GameEngine.Object;
 using GameEngine.Object.Entity;
 using System.Xml.Linq;
+using GameEngine.Engine.Input;
 
 
 
@@ -61,38 +62,38 @@ public class Nave : Controller
     }
     public override void Loop()
     {
-        Invoker.Execute(new GetKeyboard(this,(x)=>{
-            Speed = MappingInputToVector2(x.Get<string>("Key")) ?? new(0, 0);
-            if (x.Get<string>("Key") == "r")
-                Invoker.Undo();
-            MappingInputToRotation(x.Get<string>("Key"), this);
-            if (x.Get<string>("Key") == "space")
+         
+            KeyManager.Is("r", () => Invoker.Undo());
+           
+            ActWithInput(this);
+            KeyManager.Is("space", () =>
             {
-                Invoker.Execute(new CreateControllerCommand(this,"bullet"+ nBullet, new Bullet(this.Entity.AbsolutePosition.Plus(new(1,1)), MappingAngleToVector2(),Entity.Name)));
+                var bullet = new Bullet(this.Entity.AbsolutePosition.Plus(new(1, 1)), MappingAngleToVector2(), Entity.Name);
+                Invoker.Execute(new CreateControllerCommand(this, "bullet" + nBullet,bullet ));
                 nBullet++;
-            }
-        }));
-
-        Invoker.Execute(new MoveCommand(this, Speed));
-
+            });
+  
+            Invoker.Execute(new MoveCommand(this, Speed));
     }
-    private static Point2? MappingInputToVector2(string? key) => key switch
+    private void ActWithInput(Controller c)
     {
-        "a" => new Point2(-1, 0),
-        "d" => new Point2(1, 0),
-        "w" => new Point2(0, 1),
-        "s" => new Point2(0, -1),
-        _ => null,
-    };
-    private static void MappingInputToRotation(string key, Controller c)
-    {
-        switch (key)
-        {
-            case "a": c.Invoker.Execute(new AbsoluteRotateCommand(c,270)); break;
-            case "d": c.Invoker.Execute(new AbsoluteRotateCommand(c, 90)); break;
-            case "w": c.Invoker.Execute(new AbsoluteRotateCommand(c, 0)); break;
-            case "s": c.Invoker.Execute(new AbsoluteRotateCommand(c, 180)); break;
-        }
+            Speed = new(0, 0);
+            KeyManager.Is("a", () => { 
+                c.Invoker.Execute(new AbsoluteRotateCommand(c, 270));
+                Speed=Speed.Plus(new(-1, 0));  
+            });
+            KeyManager.Is("d", () => {
+                c.Invoker.Execute(new AbsoluteRotateCommand(c, 90));
+                Speed = Speed.Plus(new(1, 0));
+            });
+            KeyManager.Is("w", () => {
+                c.Invoker.Execute(new AbsoluteRotateCommand(c, 0));
+                Speed = Speed.Plus(new(0, 1));
+            });
+            KeyManager.Is("s", () => {
+                c.Invoker.Execute(new AbsoluteRotateCommand(c, 180));
+                Speed = Speed.Plus(new(0, -1));
+            });
     }
     private Point2? MappingAngleToVector2() => Entity.Sprite.Angle switch
     {
@@ -107,24 +108,25 @@ internal class Bullet : Controller
 {
     private Point2 Speed;
     private Point2 Init;
-    private string Own;
-    public Bullet(Point2 position,Point2 speed,string own)
+    private string Owner;
+    public Bullet(Point2 position,Point2 speed,string owner)
     {
-        Own=own;
+        Owner=owner;
         Init =position;
         var StillObject = Entity.New(1, position);
         StillObject.Sprite.Data.FillWith(new Pixel("o",new InfoPixel { Color="green"}));
+        StillObject.Sprite.IsVisible = true;
         StillObject.Body.Data.SetAllTangible();
         SetStillObject(StillObject);
         Speed = new Point2(-speed.x*2,-speed.y*2);
-        Entity.Body.CollideBut(Own);
+        Entity.Body.CollideBut(Owner);
     }
     public override void Loop()
     {
         Invoker.Execute(new MoveCommand(this, Speed, (x =>
         {
             if (!((MoveResult)x).CanMove)
-                Entity.Body.CollideWith(Own);
+                Entity.Body.CollideWith(Owner);
         })));
         if (Init.Minus(Entity.AbsolutePosition).GetModule() > 10)
             Invoker.Execute(new DestroyMeCommand(this));

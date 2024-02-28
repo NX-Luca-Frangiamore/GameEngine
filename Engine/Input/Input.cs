@@ -1,26 +1,26 @@
+using GameEngine.Engine.Input;
+using GameEngine.Engine.InvokerEngine.Commands;
+using System.Windows.Input;
+using System.Windows.Threading;
 namespace InputEngine;
 class ConsoleInput : IInput
 {
     public override void StartUpdateInput()
     {
-        Task.Run(() => {
-            while (true)
-            {
-                keyPressed = Console.ReadKey(true).Key switch
-                {
-                    ConsoleKey.A => "a",
-                    ConsoleKey.W => "w",
-                    ConsoleKey.D => "d",
-                    ConsoleKey.S => "s",
-                    ConsoleKey.R => "r",
-                    ConsoleKey.Spacebar => "space",
-                    ConsoleKey.Q => "q",
-                    _ => ""
-                };
-                while (Console.KeyAvailable)Console.ReadKey(true);
+        Thread thread = new Thread(() => {
+            while(true) { 
+                if (Keyboard.IsKeyDown(Key.W)) KeyManager.Set(CustomKey.w);
+                if (Keyboard.IsKeyDown(Key.D)) KeyManager.Set(CustomKey.d);
+                if (Keyboard.IsKeyDown(Key.A)) KeyManager.Set(CustomKey.a);
+                if (Keyboard.IsKeyDown(Key.S)) KeyManager.Set(CustomKey.s);
+                if (Keyboard.IsKeyDown(Key.R)) KeyManager.Set(CustomKey.r);
+                if (Keyboard.IsKeyDown(Key.Space)) KeyManager.Set(CustomKey.space);
+                if (Keyboard.IsKeyDown(Key.Q)) KeyManager.Set(CustomKey.q);
                 
                 Thread.Sleep(Delay);
             }
         });
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.Start();
     }
 }

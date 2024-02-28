@@ -3,6 +3,7 @@ using Utils;
 namespace GameEngine.Object;
 public class Body{
     public bool IsTangible { get; set; } = true;
+    public bool IsPermeable { get; set; } = false;
     public Point2 Position { get; set; }
     public int Angle {  get; private set; }
     public CollisionMatrix Data { get; set; }

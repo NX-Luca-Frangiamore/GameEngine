@@ -8,10 +8,11 @@ public class BasePhysicsEngine(ObjectResource ObjectsReferents) : IPhisicsEngine
 {
     public override void Traslate(Entity body, Point2 v)=>body.SetAbsolutePosition(v);
 
-    public override bool AreThereCollisions(Entity entity, Point2 move)
+    public override CollisionInfo AreThereCollisions(Entity entity, Point2 move)
     {
         Point2 absolutePositionBody= entity.AbsolutePosition.Plus(entity.Body.Position).Plus(move);
-        if (!entity.Body.IsTangible) return false;
+        CollisionInfo collisionInfo = new CollisionInfo();
+        if (!entity.Body.IsTangible) return collisionInfo;
         foreach(var part in entity.Body.Data.Elements){
             if(!part.Value)continue;
           
@@ -22,10 +23,18 @@ public class BasePhysicsEngine(ObjectResource ObjectsReferents) : IPhisicsEngine
                 if (entity.Body.Expect.Contains(otherObject.Name)) continue;
                 if (otherObject.Body.Expect.Contains(entity.Name)) continue;
                 if (!otherObject.Body.IsTangible)continue;
-                if (otherObject.Body.Data.Elements.Any(x=>x.Value && x.Key.Plus(otherObject.AbsolutePosition.Plus(otherObject.Body.Position))==absolutePositionPart))
-                    return true;
+                if (!otherObject.Body.IsPermeable)
+                {
+                    collisionInfo.Collisions.Add(new(otherObject.Name, true));
+                    continue;
+                }
+                if (otherObject.Body.Data.Elements.Any(x => x.Value && x.Key.Plus(otherObject.AbsolutePosition.Plus(otherObject.Body.Position)) == absolutePositionPart))
+                {
+                    collisionInfo.CrushedWith = new(otherObject.Name);
+                    return collisionInfo;
+                }
             }
         }
-        return false;
+        return collisionInfo;
     }
 }
