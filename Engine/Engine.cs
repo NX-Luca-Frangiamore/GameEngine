@@ -4,6 +4,7 @@ using InputEngine;
 using PhysicsEngine;
 using GameEngine.Engine.InvokerEngine;
 namespace Engine;
+
 public abstract partial class IEngine{
     private int _delayFrame = 500;
     public int DelayFrame { get {return _delayFrame; }set{ if (value is < MAX_TIME_FRAME and > 0) _delayFrame = value; } }

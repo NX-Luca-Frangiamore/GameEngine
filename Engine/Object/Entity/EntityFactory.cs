@@ -24,7 +24,7 @@ public class EntityFactory
                 if (!String.IsNullOrEmpty(dto.Rows[y].Els[x]))
                 {
                     entity.Sprite.Data.SetPixel(new(x, y), pixel);
-                    entity.Body.Data.SetTangible(new(x, y));
+                    entity.Body.Data.SetElement(new(x, y),true);
                 }
             }
         }

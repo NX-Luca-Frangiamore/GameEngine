@@ -9,25 +9,22 @@ using Microsoft.Extensions.Hosting;
 using GameEngine.Engine.InvokerEngine.Commands;
 using GameEngine.Object;
 using GameEngine.Object.Entity;
-using System.Xml.Linq;
 using GameEngine.Engine.Input;
-
-
 
 void StartEngine<T>(T typeLinkAssembly) where T:Type
 {
-    var builder = Host.CreateApplicationBuilder(args);
-    builder.Services.AddSingleton<ObjectResource>();
-    builder.Services.AddSingleton<IPhisicsEngine, BasePhysicsEngine>();
-    builder.Services.AddSingleton<IDisplay, ConsoleMulticolorDisplay>();
-    builder.Services.AddSingleton<IGraphicsEngine, ColorGraphicsEngine>();
-    builder.Services.AddSingleton<IInput, ConsoleInput>();
-    builder.Services.AddSingleton<IEngine, Game>();
-    var host = builder.Build();
-       var engine= host.Services.GetRequiredService<IEngine>();
-        engine.ResourceEngine.CollectObjects(typeLinkAssembly);
-        engine.Start();
-    host.Run();
+	var builder = Host.CreateApplicationBuilder(args);
+	builder.Services.AddSingleton<ObjectResource>();
+	builder.Services.AddSingleton<IPhisicsEngine, BasePhysicsEngine>();
+	builder.Services.AddSingleton<IDisplay, ConsoleMulticolorDisplay>();
+	builder.Services.AddSingleton<IGraphicsEngine, ColorGraphicsEngine>();
+	builder.Services.AddSingleton<IInput, ConsoleInput>();
+	builder.Services.AddSingleton<IEngine, Game>();
+	var host = builder.Build();
+	var engine= host.Services.GetRequiredService<IEngine>();
+	engine.ResourceEngine.CollectObjects(typeLinkAssembly);
+	engine.Start();
+	host.Run();
 }
 StartEngine(typeof(Game));
 
@@ -42,6 +39,7 @@ public class Game :IEngine
        
     }   
 }
+
 public class Nave : Controller
 {
     private Point2 Speed = new(0, 0);
@@ -49,8 +47,6 @@ public class Nave : Controller
     public Nave()
     {
         Entity stillObject = Entity.New(3, new(1, 1));
-
-
         DtoCreateEntity dto = new DtoCreateEntity(3);
         dto.Rows.Add(new(3) { Els = ["", "o", ""] });
         dto.Rows.Add(new(3) { Els = ["", "o", ""] });
@@ -60,13 +56,13 @@ public class Nave : Controller
         SetStillObject(EntityFactory.CreateEntity(new(1, 1), dto));
     
     }
+
     public override void Loop()
     {
          
-            KeyManager.Is("r", () => Invoker.Undo());
-           
+            KeyManager.ParseKey("r", () => Invoker.Undo());
             ActWithInput(this);
-            KeyManager.Is("space", () =>
+            KeyManager.ParseKey("space", () =>
             {
                 var bullet = new Bullet(this.Entity.AbsolutePosition.Plus(new(1, 1)), MappingAngleToVector2(), Entity.Name);
                 Invoker.Execute(new CreateControllerCommand(this, "bullet" + nBullet,bullet ));
@@ -75,26 +71,28 @@ public class Nave : Controller
   
             Invoker.Execute(new MoveCommand(this, Speed));
     }
+
     private void ActWithInput(Controller c)
     {
             Speed = new(0, 0);
-            KeyManager.Is("a", () => { 
+            KeyManager.ParseKey("a", () => { 
                 c.Invoker.Execute(new AbsoluteRotateCommand(c, 270));
-                Speed=Speed.Plus(new(-1, 0));  
-            });
-            KeyManager.Is("d", () => {
+                Speed=Speed.Plus(new(-1, 0)); 
+            }).Or(
+            ()=>KeyManager.ParseKey("d", () => {
                 c.Invoker.Execute(new AbsoluteRotateCommand(c, 90));
                 Speed = Speed.Plus(new(1, 0));
-            });
-            KeyManager.Is("w", () => {
+            })).Or(
+            ()=>KeyManager.ParseKey("w", () => {
                 c.Invoker.Execute(new AbsoluteRotateCommand(c, 0));
                 Speed = Speed.Plus(new(0, 1));
-            });
-            KeyManager.Is("s", () => {
+            })).Or(
+            ()=>KeyManager.ParseKey("s", () => {
                 c.Invoker.Execute(new AbsoluteRotateCommand(c, 180));
                 Speed = Speed.Plus(new(0, -1));
-            });
+            }));
     }
+
     private Point2? MappingAngleToVector2() => Entity.Sprite.Angle switch
     {
         0 => new Point2(0, -1),
@@ -104,6 +102,7 @@ public class Nave : Controller
         _ => throw new NotImplementedException(),
     };
 }
+
 internal class Bullet : Controller
 {
     private Point2 Speed;
@@ -116,11 +115,12 @@ internal class Bullet : Controller
         var StillObject = Entity.New(1, position);
         StillObject.Sprite.Data.FillWith(new Pixel("o",new InfoPixel { Color="green"}));
         StillObject.Sprite.IsVisible = true;
-        StillObject.Body.Data.SetAllTangible();
+	StillObject.Body.Data.FillWith(true);
         SetStillObject(StillObject);
         Speed = new Point2(-speed.x*2,-speed.y*2);
         Entity.Body.CollideBut(Owner);
     }
+
     public override void Loop()
     {
         Invoker.Execute(new MoveCommand(this, Speed, (x =>
@@ -132,13 +132,14 @@ internal class Bullet : Controller
             Invoker.Execute(new DestroyMeCommand(this));
     }
 }
+
 public class Wall : Controller
 {
     public Wall()
     {
         var StillObject =Entity.New(5, new(8, 1));
         StillObject.Sprite.Data.FillWith("*");
-        StillObject.Body.Data.SetAllTangible();
+        StillObject.Body.Data.FillWith(true);
         SetStillObject(StillObject);
     }
 }

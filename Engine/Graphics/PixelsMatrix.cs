@@ -13,21 +13,12 @@ public class PixelsMatrix: Matrix<Pixel>
     public PixelsMatrix(Point2 dimension) : this(dimension, 1) { }
     
     public PixelsMatrix(Point2 dimension, Dictionary<Point2, Pixel> elemets) : base(dimension,new(" "), elemets) { }
+
     public bool FillWith(string data){
         if (data.Length > this.NCharactersPixel) return false;
-        for (int y = 0; y < this.Dimension.y; y++)
-            for (int x = 0; x < this.Dimension.x; x++)
-                if (!this.SetElement(new(x, y), new(data))) return false;
-        return true;
+	return base.FillWith(new(data));
     }
-    public bool FillWith(Pixel pixel)
-    {
-        if (pixel.Value?.Length > this.NCharactersPixel) return false;
-        for (int y = 0; y < this.Dimension.y; y++)
-            for (int x = 0; x < this.Dimension.x; x++)
-                if (!this.SetElement(new(x, y), pixel)) return false;
-        return true;
-    }
+
     public Pixel GetPixel(Point2 p) => GetElement(p) ?? new Pixel(" ");
     public bool SetPixel(Point2 p, Pixel v)
     {

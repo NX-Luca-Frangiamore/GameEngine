@@ -1,6 +1,5 @@
 using Engine;
 using GameEngine.Object.Entity;
-using System.Linq;
 using Utils;
 
 namespace PhysicsEngine;
@@ -23,7 +22,7 @@ public class BasePhysicsEngine(ObjectResource ObjectsReferents) : IPhisicsEngine
                 if (entity.Body.Expect.Contains(otherObject.Name)) continue;
                 if (otherObject.Body.Expect.Contains(entity.Name)) continue;
                 if (!otherObject.Body.IsTangible)continue;
-                if (!otherObject.Body.IsPermeable)
+                if (otherObject.Body.IsPermeable)
                 {
                     collisionInfo.Collisions.Add(new(otherObject.Name, true));
                     continue;

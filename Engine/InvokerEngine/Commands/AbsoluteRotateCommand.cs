@@ -10,8 +10,8 @@ public class AbsoluteRotateCommand(Controller o, int angle, CallBack? callBack =
     public override RotateResult OnExecution(IEngine engine) {
         O.Entity.AbsoluteRotate(Angle);
         var r = engine.PhisicsEngine.AreThereCollisions(O.Entity, new(0, 0));
-        if (r)O.Entity.AbsoluteRotate(360-Angle);
-        return new RotateResult(!r);
+        if (r is null)O.Entity.AbsoluteRotate(360-Angle);
+        return new RotateResult(r is null);
     }
     public override void OnUndo(IEngine engine)
     {

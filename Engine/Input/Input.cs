@@ -1,8 +1,7 @@
 using GameEngine.Engine.Input;
-using GameEngine.Engine.InvokerEngine.Commands;
 using System.Windows.Input;
-using System.Windows.Threading;
 namespace InputEngine;
+
 class ConsoleInput : IInput
 {
     public override void StartUpdateInput()

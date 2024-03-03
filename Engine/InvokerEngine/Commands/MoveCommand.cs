@@ -18,7 +18,7 @@ public class MoveCommand : ICommand
         for (var i = 0; i < module; i++)
         {
            if(engine.PhisicsEngine.AreThereCollisions(O.Entity, versore) is CollisionInfo collisionInfo) 
-                if(collisionInfo.CrushedWith is not null)
+                if(collisionInfo.CrushedWith?.Name is not null)
                      return new MoveResult(false); ;
            O.Entity.SetAbsolutePosition(O.Entity.AbsolutePosition.Plus(versore));
         }

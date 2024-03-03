@@ -14,19 +14,27 @@ public class KeyManager
 {
     public static Dictionary<CustomKey,bool> keys = [];
     public static void Set(CustomKey key) =>keys[key]=true;
-    public static bool Is(CustomKey keyPressed)=>keys.Remove(keyPressed); 
-    public static bool Is(string keyPressed) {
+    public static bool ParseKey(CustomKey keyPressed)=>keys.Remove(keyPressed); 
+    public static bool ParseKey(string keyPressed) {
         _ = Enum.TryParse<CustomKey>(keyPressed,true, out CustomKey key);
-        return Is(key);
+        return ParseKey(key);
     }
-    public static void Is(string keyPressed,Action action)
+    public static bool ParseKey(string keyPressed,Action action)
     {
         _ = Enum.TryParse<CustomKey>(keyPressed, true, out CustomKey key);
-        if(Is(key))action();
+        if(ParseKey(key)){
+		action();
+		return true;
+	}
+	return false;
     }
-    public static void Is(CustomKey keyPressed, Action action)
+    public static bool ParseKey(CustomKey keyPressed, Action action)
     {
-        if (Is(keyPressed)) action();
+        if (ParseKey(keyPressed)){
+		action();
+		return true;
+	}
+	return false;
     }
 
 

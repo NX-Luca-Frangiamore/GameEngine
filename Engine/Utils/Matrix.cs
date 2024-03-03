@@ -20,7 +20,7 @@ public class Matrix<T>{
         return Elements.TryGetValue(p, out T? value) ? value : Default_value;
     }
 
-    protected bool SetElement(Point2 p,T? value){
+    public bool SetElement(Point2 p,T? value){
         if (!CanElementBeInMatrix(p)) return false;
         if (value is null)
             Elements[p] = Default_value;
@@ -47,6 +47,13 @@ public class Matrix<T>{
                 SetElement(new(y, x), date);
     }
     protected bool DeleteElement(Point2 p) => Elements.Remove(p);
+
+    public bool FillWith(T data){
+        for (int y = 0; y < this.Dimension.y; y++)
+            for (int x = 0; x < this.Dimension.x; x++)
+                if (!this.SetElement(new(x, y),data)) return false;
+        return true;
+    }
 
     private bool CanElementBeInMatrix(Point2 p){
         if (p.x < 0 && p.x >= this.Dimension.x) return false;
