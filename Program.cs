@@ -59,7 +59,6 @@ public class Nave : Controller
 
     public override void Loop()
     {
-         
             KeyManager.ParseKey("r", () => Invoker.Undo());
             ActWithInput(this);
             KeyManager.ParseKey("space", () =>
@@ -93,7 +92,7 @@ public class Nave : Controller
             }));
     }
 
-    private Point2? MappingAngleToVector2() => Entity.Sprite.Angle switch
+    private Point2 MappingAngleToVector2() => Entity.Sprite.Angle switch
     {
         0 => new Point2(0, -1),
         90 => new Point2(-1, 0),
