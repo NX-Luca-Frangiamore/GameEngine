@@ -36,7 +36,6 @@ public class Game :IEngine
     {
         this.InputEngine.Delay = 100;
         DelayFrame = 100;
-       
     }   
 }
 
@@ -59,9 +58,9 @@ public class Nave : Controller
 
     public override void Loop()
     {
-            KeyManager.ParseKey("r", () => Invoker.Undo());
+            KeyManager.IsThereThen("r", () => Invoker.Undo());
             ActWithInput(this);
-            KeyManager.ParseKey("space", () =>
+            KeyManager.IsThereThen("space", () =>
             {
                 var bullet = new Bullet(this.Entity.AbsolutePosition.Plus(new(1, 1)), MappingAngleToVector2(), Entity.Name);
                 Invoker.Execute(new CreateControllerCommand(this, "bullet" + nBullet,bullet ));
@@ -74,19 +73,19 @@ public class Nave : Controller
     private void ActWithInput(Controller c)
     {
             Speed = new(0, 0);
-            KeyManager.ParseKey("a", () => { 
+            KeyManager.IsThereThen("a", () => { 
                 c.Invoker.Execute(new AbsoluteRotateCommand(c, 270));
                 Speed=Speed.Plus(new(-1, 0)); 
             }).Or(
-            ()=>KeyManager.ParseKey("d", () => {
+            ()=>KeyManager.IsThereThen("d", () => {
                 c.Invoker.Execute(new AbsoluteRotateCommand(c, 90));
                 Speed = Speed.Plus(new(1, 0));
             })).Or(
-            ()=>KeyManager.ParseKey("w", () => {
+            ()=>KeyManager.IsThereThen("w", () => {
                 c.Invoker.Execute(new AbsoluteRotateCommand(c, 0));
                 Speed = Speed.Plus(new(0, 1));
             })).Or(
-            ()=>KeyManager.ParseKey("s", () => {
+            ()=>KeyManager.IsThereThen("s", () => {
                 c.Invoker.Execute(new AbsoluteRotateCommand(c, 180));
                 Speed = Speed.Plus(new(0, -1));
             }));
