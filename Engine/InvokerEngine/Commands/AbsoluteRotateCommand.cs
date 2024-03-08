@@ -3,9 +3,8 @@ using GameEngine.Engine.InvokerEngine.Abstracts;
 using GameEngine.Object;
 
 namespace GameEngine.Engine.InvokerEngine.Commands;
-public class AbsoluteRotateCommand(Controller o, int angle, CallBack? callBack = default) : ICommand(o,callBack)
-{
-    private readonly int Angle = angle;
+public class AbsoluteRotateCommand(Controller o, int Angle, CallBack<RotateResult>? callBack = default) :
+	     ICommand(o,callBack is null?default:(x)=>callBack((RotateResult)x)){
 
     public override RotateResult OnExecution(IEngine engine) {
         O.Entity.AbsoluteRotate(Angle);
@@ -15,7 +14,7 @@ public class AbsoluteRotateCommand(Controller o, int angle, CallBack? callBack =
     }
     public override void OnUndo(IEngine engine)
     {
-        O.Entity.RelativeRotate(O.Entity.Body.Angle-angle);
+        O.Entity.RelativeRotate(O.Entity.Body.Angle-Angle);
     }
 }
 

@@ -4,12 +4,12 @@ using GameEngine.Object;
 
 namespace GameEngine.Engine.InvokerEngine.Abstracts;
 
-public delegate void CallBack(IResult result);
-public abstract class ICommand(Controller o, CallBack? callBack = default)
+public delegate void CallBack<IT>(IT result);
+public abstract class ICommand(Controller o, CallBack<IResult>? callBack = default)
 {
     public Controller O { get; private set; } = o;
     public string FromWho { get; init; } = o.Entity.Name;
-    private readonly CallBack CallBack = callBack ?? ((x) => { });
+    private readonly CallBack<IResult> CallBack = callBack ?? ((x) => { });
 
     public void Execute(IEngine engine){
         CallBack(OnExecution(engine));

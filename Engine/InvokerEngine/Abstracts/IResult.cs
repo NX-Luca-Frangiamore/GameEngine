@@ -1,6 +1,6 @@
 namespace GameEngine.Engine.InvokerEngine.Abstracts;
 
-public abstract class IResult { 
+public abstract class IResult {
     public Dictionary<string,object>Results=[];
     public void AddResults<T>(string key,T data)=>Results[key]=data!;
     public T? Get<T>(string key){
@@ -15,8 +15,6 @@ public abstract class IResult {
     }
     public override string ToString(){
         return Results.ToString()!;
-    }
-
-}
+}}
 public class DefaultResult : IResult { 
 }

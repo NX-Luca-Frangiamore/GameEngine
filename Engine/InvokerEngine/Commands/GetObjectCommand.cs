@@ -1,16 +1,11 @@
 ﻿using Engine;
 using GameEngine.Engine.InvokerEngine.Abstracts;
 using GameEngine.Object;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using ICommand = GameEngine.Engine.InvokerEngine.Abstracts.ICommand;
 
 namespace GameEngine.Engine.InvokerEngine.Commands;
-public class GetControllerCommand(Controller o, string Name, CallBack? callBack = null) : ICommand(o, callBack)
+public class GetControllerCommand(Controller o, string Name, CallBack<GetControllerResult>? callBack = null) 
+	: ICommand(o, callBack is null?default:x=>callBack((GetControllerResult)x))
 {
     public override IResult OnExecution(IEngine engine)
     {
@@ -18,8 +13,8 @@ public class GetControllerCommand(Controller o, string Name, CallBack? callBack 
         return new GetControllerResult(r);
     }
 }
-public class GetControllerResult : IResult
+public class GetControllerResult(Controller?c=default) : IResult
 {
-    public GetControllerResult(Controller? c) => AddResults("Object", c);
+	public readonly Controller? controller=c;
 }
 

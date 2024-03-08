@@ -1,5 +1,3 @@
-using Engine;
-using Graphics.Display;
 using Graphics.GraphicsEngine;
 using InputEngine;
 using PhysicsEngine;
@@ -10,6 +8,8 @@ using GameEngine.Engine.InvokerEngine.Commands;
 using GameEngine.Object;
 using GameEngine.Object.Entity;
 using GameEngine.Engine.Input;
+using Engine;
+using Graphics.Display;
 
 void StartEngine<T>(T typeLinkAssembly) where T:Type
 {
@@ -124,7 +124,7 @@ internal class Bullet : Controller
     {
         Invoker.Execute(new MoveCommand(this, Speed, (x =>
         {
-            if (!((MoveResult)x).CanMove)
+            if (x.CanMove)
                 Entity.Body.CollideWith(Owner);
         })));
         if (Init.Minus(Entity.AbsolutePosition).GetModule() > 10)

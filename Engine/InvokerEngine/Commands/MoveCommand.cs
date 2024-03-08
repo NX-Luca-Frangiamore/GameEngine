@@ -8,7 +8,8 @@ namespace GameEngine.Engine.InvokerEngine.Commands;
 public class MoveCommand : ICommand
 {
     private readonly Point2 Move;
-    public MoveCommand(Controller O, Point2 move, CallBack? callBack = default):base(O, callBack)
+    public MoveCommand(Controller O, Point2 move, CallBack<MoveResult>? callBack = default):base(O, 
+		    callBack is null?default:(x)=>callBack((MoveResult)x))
     {
         Move = move;
     }
@@ -30,10 +31,6 @@ public class MoveCommand : ICommand
         O.Entity.SetAbsolutePosition(O.Entity.AbsolutePosition.Minus(Move));
     }
 }
-public class MoveResult:IResult{
-    public MoveResult(bool canMove)=>AddResults("canMove",canMove);
-    public MoveResult(bool canMove, bool passOver):this(canMove)=>AddResults("passOver", passOver);
-    public bool CanMove { get { return Get<bool>("canMove"); } }
-    public bool PassOver { get { return Get<bool>("passOver"); } }
-
+public class MoveResult(bool canMove):IResult{
+	public readonly bool CanMove=canMove;
 }

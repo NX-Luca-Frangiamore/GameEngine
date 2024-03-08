@@ -1,16 +1,11 @@
 ﻿using Engine;
 using GameEngine.Engine.InvokerEngine.Abstracts;
 using GameEngine.Object;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameEngine.Engine.InvokerEngine.Commands;
 public class DestroyMeCommand : ICommand
 {
-    public DestroyMeCommand(Controller o, CallBack? callBack = null) : base(o, callBack)
+    public DestroyMeCommand(Controller o, CallBack<IResult>? callBack = null) : base(o, callBack)
     {
     }
 

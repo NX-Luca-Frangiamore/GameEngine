@@ -3,7 +3,8 @@ using GameEngine.Engine.InvokerEngine.Abstracts;
 using GameEngine.Object;
 
 namespace GameEngine.Engine.InvokerEngine.Commands;
-public class RelativeRotateCommand(Controller o, int angle, CallBack? callBack = default) : ICommand(o,callBack)
+public class RelativeRotateCommand(Controller o, int angle, CallBack<RotateResult>? callBack = default) 
+	: ICommand(o,callBack is null?default:(x)=>callBack((RotateResult)x))
 {
     private readonly int Angle = angle;
 
@@ -18,8 +19,8 @@ public class RelativeRotateCommand(Controller o, int angle, CallBack? callBack =
         O.Entity.RelativeRotate(360-Angle);
     }
 }
-public class RotateResult : IResult
+public class RotateResult(bool canRotate) : IResult
 {
-    public RotateResult(bool canRotate) => AddResults("canRotate", canRotate);
+    public readonly bool CanRotate=canRotate;
 }
 
