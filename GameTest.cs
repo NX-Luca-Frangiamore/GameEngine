@@ -9,7 +9,6 @@ Engine.IEngine.StartEngine<Nave>()
     .SetDelayFrame(100)
     .Start();
 
-
 public class Nave : Controller
 {
     private Point2 Speed = new(0, 0);
@@ -30,6 +29,7 @@ public class Nave : Controller
     public override void Loop()
     {
         KeyManager.IsThereThen("r", () => Invoker.Undo());
+
         ActWithInput(this);
         KeyManager.IsThereThen("space", () =>
         {

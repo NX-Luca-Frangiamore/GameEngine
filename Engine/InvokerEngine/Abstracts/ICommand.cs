@@ -11,10 +11,12 @@ public abstract class ICommand(Controller o, CallBack<IResult>? callBack = defau
     public string FromWho { get; init; } = o.Entity.Name;
     private readonly CallBack<IResult> CallBack = callBack ?? ((x) => { });
 
-    public void Execute(IEngine engine){
+    public void Execute(IEngine engine)
+    {
         CallBack(OnExecution(engine));
     }
-    public void Undo(IEngine engine){
+    public void Undo(IEngine engine)
+    {
         OnUndo(engine);
     }
     public abstract IResult OnExecution(IEngine engine);

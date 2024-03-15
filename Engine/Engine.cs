@@ -37,10 +37,11 @@ public class IEngine
     }
 
     public void Stop() => this.StatusLoop = false;
-    public virtual void BeforeStartLoop() { }
-    public virtual void AfterEndLoop() { }
-    public virtual void BeforeRefresh() { }
-    public virtual void AfterRefresh() { }
+    public Action BeforeStartLoop = () => { };
+    public Action BeforeRefresh = () => { };
+    public Action AfterEndLoop = () => { };
+    public Action AfterRefresh = () => { };
+
     private void Loop()
     {
         while (StatusLoop)
@@ -79,4 +80,7 @@ public class IEngine
         this.InputEngine.Delay = value;
         return this;
     }
+}
+public static class ExtensionsEngine
+{
 }
